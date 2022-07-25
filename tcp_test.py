@@ -1,9 +1,23 @@
 import socket
+import subprocess
 
-class Session:
+
+IP_ADDRESS = "127.0.0.1"
+PORT = 4444
+
+
+class Server:
+    def __init__(self):
+        pass
+
+    def start_vlc_server():
+        subprocess.run(["cvlc", "--control=rc" f"--rc-host={IP_ADDRESS}:{PORT}"])
+
+
+class VLCSession:
     def __init__(self):
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.s.connect(("127.0.0.1", 4444))
+        self.s.connect((IP_ADDRESS, PORT))
         print(str(self._receive()))
 
     def send_command(self, cmd: str) -> str:
@@ -24,6 +38,6 @@ class Session:
         return (b''.join(data)).decode("utf-8")
 
 
-vlc_session = Session()
+vlc_session = VLCSession()
 print(vlc_session.send_command("help"))
 breakpoint()
