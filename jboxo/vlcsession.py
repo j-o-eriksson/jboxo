@@ -6,12 +6,9 @@ IP_ADDRESS = "127.0.0.1"
 PORT = 4444
 
 
-class Server:
-    def __init__(self):
-        pass
-
-    def start_vlc_server():
-        subprocess.run(["cvlc", "--control=rc" f"--rc-host={IP_ADDRESS}:{PORT}"])
+def start_vlc_server():
+    """TODO: start service in separate thread."""
+    subprocess.run(["cvlc", "--control=rc" f"--rc-host={IP_ADDRESS}:{PORT}"])
 
 
 class VLCSession:
