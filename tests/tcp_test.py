@@ -35,7 +35,7 @@ class VLCSession:
             if b">" in chunk:
                 break
 
-        return (b''.join(data)).decode("utf-8")
+        return (b"".join(data)).decode("utf-8")
 
 
 vlc_session = VLCSession()

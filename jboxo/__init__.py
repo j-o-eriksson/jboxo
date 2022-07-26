@@ -1,4 +1,5 @@
 import ast
+import json
 from pathlib import Path
 
 from flask import Flask, request
@@ -12,10 +13,10 @@ class Dummy:
     def __init__(self):
         self.root = Path("/home/jon/dev/jboxo/data")
         self.m = {
-          "add": self._add,
-          "play": self._play,
-          "pause": self._pause,
-          "stop": self._stop,
+            "add": self._add,
+            "play": self._play,
+            "pause": self._pause,
+            "stop": self._stop,
         }
 
     def execute(self, cmd: str, session: VLCSession) -> str:
@@ -47,20 +48,21 @@ def create_app():
 
     app = Flask(__name__)
 
-    @app.post('/control/<cmd>')
+    @app.post("/control/<cmd>")
     def execute_command(cmd):
         session = VLCSession()
         response = dummy.execute(cmd, session)
         return f"<p>{response}</p>"
 
-    @app.get('/list')
+    @app.get("/videos")
     def list_objects():
-        items = "".join([f"<p>{p.name}</p>" for p in dummy.root.iterdir()])
-        return items
+        # items = "".join([f"<p>{p.name}</p>" for p in dummy.root.iterdir()])
+        return json.dumps(
+            [{"id": i, "path": p.name} for i, p in enumerate(dummy.root.iterdir())]
+        )
 
     @app.route("/")
     def hello_world():
         return "<p>Hello, World!</p>"
-    
-    return app
 
+    return app
