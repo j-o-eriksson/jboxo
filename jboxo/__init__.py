@@ -1,5 +1,6 @@
 import ast
 import json
+import subprocess
 from pathlib import Path
 
 from flask import Flask, request
@@ -7,38 +8,66 @@ from flask import Flask, request
 from .vlcsession import VLCSession
 
 
+def _get_duration(path: Path) -> int:
+    """Uses ffmpeg to get the duration in seconds of a video."""
+    cmd = f"ffprobe -i {path} -show_entries format=duration -v quiet -of csv='p=0'"
+    return int(float(subprocess.check_output(cmd, shell=True).decode("utf-8").strip()))
+
+
 class Dummy:
     """ """
 
     def __init__(self):
+        """ """
         self.root = Path("/home/jon/dev/jboxo/data")
         self.m = {
             "add": self._add,
             "play": self._play,
             "pause": self._pause,
             "stop": self._stop,
+            "seek": self._seek,
         }
 
     def execute(self, cmd: str, session: VLCSession) -> str:
+        """ """
         if cmd not in self.m:
             return "Error: invalid command."
 
         f = self.m[cmd]
         return f(session)
 
+    def get_info(self, video_path: Path) -> str:
+        """ """
+        return json.dumps({
+            "name": video_path.stem,
+            "duration": _get_duration(self.root / video_path),
+            "subtitles": []
+            })
+
     def _add(self, session) -> str:
+        """ """
         data = ast.literal_eval(request.data.decode("utf-8"))
-        path = self.root / data["path"]
+        path = self.root / data["videoPath"]
+        print(_get_duration(path))
         return session.send_command(f"add {path}")
 
     def _play(self, session) -> str:
+        """ """
         return session.send_command("play")
 
     def _pause(self, session) -> str:
+        """ """
         return session.send_command("pause")
 
     def _stop(self, session) -> str:
+        """ """
         return session.send_command("stop")
+
+    def _seek(self, session) -> str:
+        """ """
+        data = ast.literal_eval(request.data.decode("utf-8"))
+        timestamp = int(data["timestamp"])
+        return session.send_command(f"seek {timestamp}")
 
 
 def create_app():
@@ -58,8 +87,13 @@ def create_app():
     def list_objects():
         # items = "".join([f"<p>{p.name}</p>" for p in dummy.root.iterdir()])
         return json.dumps(
-            [{"id": i, "path": p.name} for i, p in enumerate(dummy.root.iterdir())]
+            [{"name": p.stem, "path": str(p)} for i, p in enumerate(dummy.root.iterdir())]
         )
+
+    @app.get("/info")
+    def object_info():
+        data = ast.literal_eval(request.data.decode("utf-8"))
+        return dummy.get_info(Path(data["videoPath"]))
 
     @app.route("/")
     def hello_world():
