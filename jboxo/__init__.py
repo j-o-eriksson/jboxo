@@ -36,13 +36,15 @@ class Dummy:
         f = self.m[cmd]
         return f(session)
 
-    def get_info(self, video_path: Path) -> str:
+    def get_video_info(self, video_path: Path) -> str:
         """ """
-        return json.dumps({
-            "name": video_path.stem,
-            "duration": _get_duration(self.root / video_path),
-            "subtitles": []
-            })
+        return json.dumps(
+            {
+                "name": video_path.stem,
+                "duration": _get_duration(self.root / video_path),
+                "subtitles": [],
+            }
+        )
 
     def _add(self, session) -> str:
         """ """
@@ -85,15 +87,14 @@ def create_app():
 
     @app.get("/videos")
     def list_objects():
-        # items = "".join([f"<p>{p.name}</p>" for p in dummy.root.iterdir()])
         return json.dumps(
-            [{"name": p.stem, "path": str(p)} for i, p in enumerate(dummy.root.iterdir())]
+            [{"name": p.stem, "path": str(p)} for p in dummy.root.iterdir()]
         )
 
-    @app.get("/info")
+    @app.post("/info")  # TODO: ideally, this should be GET info/<path>
     def object_info():
         data = ast.literal_eval(request.data.decode("utf-8"))
-        return dummy.get_info(Path(data["videoPath"]))
+        return dummy.get_video_info(Path(data["videoPath"]))
 
     @app.route("/")
     def hello_world():
