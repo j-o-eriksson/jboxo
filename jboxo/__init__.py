@@ -4,13 +4,14 @@ import subprocess
 from pathlib import Path
 
 from flask import Flask, request
+from flask_cors import CORS
 
 from .vlcsession import VLCSession
 
 
 def _get_duration(path: Path) -> int:
     """Uses ffmpeg to get the duration in seconds of a video."""
-    cmd = f"ffprobe -i {path} -show_entries format=duration -v quiet -of csv='p=0'"
+    cmd = f"ffprobe -i '{path}' -show_entries format=duration -v quiet -of csv='p=0'"
     return int(float(subprocess.check_output(cmd, shell=True).decode("utf-8").strip()))
 
 
@@ -19,7 +20,7 @@ class Dummy:
 
     def __init__(self):
         """ """
-        self.root = Path("/home/jon/dev/jboxo/data")
+        self.root = Path("/home/jon/Downloads")
         self.m = {
             "add": self._add,
             "play": self._play,
@@ -41,7 +42,8 @@ class Dummy:
         return json.dumps(
             {
                 "name": video_path.stem,
-                "duration": _get_duration(self.root / video_path),
+                # "duration": _get_duration(self.root / video_path),
+                "duration": _get_duration(video_path),
                 "subtitles": [],
             }
         )
@@ -49,7 +51,7 @@ class Dummy:
     def _add(self, session) -> str:
         """ """
         data = ast.literal_eval(request.data.decode("utf-8"))
-        path = self.root / data["videoPath"]
+        path = data["videoPath"]
         print(_get_duration(path))
         return session.send_command(f"add {path}")
 
@@ -78,6 +80,7 @@ def create_app():
     dummy = Dummy()
 
     app = Flask(__name__)
+    CORS(app)
 
     @app.post("/control/<cmd>")
     def execute_command(cmd):
@@ -88,7 +91,11 @@ def create_app():
     @app.get("/videos")
     def list_objects():
         return json.dumps(
-            [{"name": p.stem, "path": str(p)} for p in dummy.root.iterdir()]
+            {
+                "data": [
+                    {"name": p.stem, "path": str(p)} for p in dummy.root.rglob("*.mp4")
+                ]
+            }
         )
 
     @app.post("/info")  # TODO: ideally, this should be GET info/<path>

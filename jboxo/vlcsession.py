@@ -8,7 +8,9 @@ PORT = 4444
 
 def start_vlc_server():
     """TODO: start service in separate thread."""
-    subprocess.run(["cvlc", "--control=rc" f"--rc-host={IP_ADDRESS}:{PORT}"])
+    # cvlc --control=rc --rc-host=127.0.0.1:4444 --fullscreen
+    cmd = f"cvlc --control=rc --rc-host={IP_ADDRESS}:{PORT} --fullscreen"
+    subprocess.run(cmd, shell=True)
 
 
 class VLCSession:
