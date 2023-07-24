@@ -19,18 +19,17 @@ class Dummy:
         }
         self.video_path: Optional[str] = None
         self.subtitle_path: Optional[str] = None
-        self.subprocess: Optional[subprocess.Popen] = None
+        self.vlcprocess: Optional[subprocess.Popen] = None
 
     def __del__(self):
-        if self.subprocess is not None:
-            self.subprocess.kill()
+        if self.vlcprocess is not None:
+            self.vlcprocess.kill()
 
-    def execute(self, cmd: str) -> str:
+    def execute(self, cmd: str) -> None:
         if cmd not in self.m:
-            return "Error: invalid command."
+            raise ValueError("Invalid command.")
 
-        f = self.m[cmd]
-        return f()
+        self.m[cmd]()
 
     def get_video_info(self, video_path: Path) -> str:
         return json.dumps(
@@ -41,38 +40,36 @@ class Dummy:
             }
         )
 
-    def _add(self) -> str:
+    def _add(self) -> None:
         data = ast.literal_eval(request.data.decode("utf-8"))
         path = data["path"]
+        datatype = data["type"]
 
-        if data["type"] == "video":
+        if datatype == "video":
             print(_get_duration(path))
             self.video_path = path
-            return "200"
-        elif data["type"] == "subtitles":
+        elif datatype == "subtitles":
             self.subtitle_path = path
-            return "200"
         else:
-            return "Error, incorrect type."
+            raise ValueError("Invalid data type.")
 
-    def _play(self) -> str:
+    def _play(self, seek_time: Optional[int] = None) -> None:
         if self.video_path is None:
-            return "fail"
+            raise ValueError("Video path not set.")
 
         cmd = f"cvlc '{self.video_path}' -f"
-        if self.subtitle_path:
+        if self.subtitle_path is not None:
             cmd += f" --sub-file '{self.subtitle_path}'"
 
+        if seek_time is not None:
+            cmd += f" --start-time={seek_time}"
+
         print("opening video with command:", cmd)
-        self.subprocess = subprocess.Popen(shlex.split(cmd))
+        self.vlcprocess = subprocess.Popen(shlex.split(cmd))
 
-        return "200"
-
-    def _stop(self) -> str:
-        if self.subprocess is not None:
-            self.subprocess.kill()
-            return "200"
-        return "fail"
+    def _stop(self) -> None:
+        if self.vlcprocess is not None:
+            self.vlcprocess.kill()
 
 
 def create_app():
@@ -84,8 +81,11 @@ def create_app():
 
     @app.post("/control/<cmd>")
     def execute_command(cmd):
-        response = dummy.execute(cmd)
-        return f"<p>{response}</p>"
+        try:
+            dummy.execute(cmd)
+            return "Success", 200
+        except:
+            return "Not found", 404
 
     @app.get("/videos")
     def list_videos():
