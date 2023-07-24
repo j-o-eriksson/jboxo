@@ -1,37 +1,38 @@
 import ast
 import json
+import shlex
 import subprocess
 from pathlib import Path
+from typing import Optional
 
 from flask import Flask, render_template, request
 
-from .vlcsession import VLCSession
-
 
 class Dummy:
-    """ """
-
     def __init__(self):
         """ """
         self.root = Path("/home/jon/Downloads")
         self.m = {
             "add": self._add,
             "play": self._play,
-            "pause": self._pause,
             "stop": self._stop,
-            "seek": self._seek,
         }
+        self.video_path: Optional[str] = None
+        self.subtitle_path: Optional[str] = None
+        self.subprocess: Optional[subprocess.Popen] = None
 
-    def execute(self, cmd: str, session: VLCSession) -> str:
-        """ """
+    def __del__(self):
+        if self.subprocess is not None:
+            self.subprocess.kill()
+
+    def execute(self, cmd: str) -> str:
         if cmd not in self.m:
             return "Error: invalid command."
 
         f = self.m[cmd]
-        return f(session)
+        return f()
 
     def get_video_info(self, video_path: Path) -> str:
-        """ """
         return json.dumps(
             {
                 "name": video_path.stem,
@@ -40,30 +41,38 @@ class Dummy:
             }
         )
 
-    def _add(self, session) -> str:
-        """ """
+    def _add(self) -> str:
         data = ast.literal_eval(request.data.decode("utf-8"))
-        path = data["videoPath"]
-        print(_get_duration(path))
-        return session.send_command(f"add {path}")
+        path = data["path"]
 
-    def _play(self, session) -> str:
-        """ """
-        return session.send_command("play")
+        if data["type"] == "video":
+            print(_get_duration(path))
+            self.video_path = path
+            return "200"
+        elif data["type"] == "subtitles":
+            self.subtitle_path = path
+            return "200"
+        else:
+            return "Error, incorrect type."
 
-    def _pause(self, session) -> str:
-        """ """
-        return session.send_command("pause")
+    def _play(self) -> str:
+        if self.video_path is None:
+            return "fail"
 
-    def _stop(self, session) -> str:
-        """ """
-        return session.send_command("stop")
+        cmd = f"cvlc {self.video_path} -f"
+        if self.subtitle_path:
+            cmd += f" --sub-file {self.subtitle_path}"
 
-    def _seek(self, session) -> str:
-        """ """
-        data = ast.literal_eval(request.data.decode("utf-8"))
-        timestamp = int(data["timestamp"])
-        return session.send_command(f"seek {timestamp}")
+        print("opening video with command:", cmd)
+        self.subprocess = subprocess.Popen(shlex.split(cmd))
+
+        return "200"
+
+    def _stop(self) -> str:
+        if self.subprocess is not None:
+            self.subprocess.kill()
+            return "200"
+        return "fail"
 
 
 def create_app():
@@ -75,16 +84,25 @@ def create_app():
 
     @app.post("/control/<cmd>")
     def execute_command(cmd):
-        session = VLCSession()
-        response = dummy.execute(cmd, session)
+        response = dummy.execute(cmd)
         return f"<p>{response}</p>"
 
     @app.get("/videos")
-    def list_objects():
+    def list_videos():
         return json.dumps(
             {
                 "data": [
                     {"name": p.stem, "path": str(p)} for p in dummy.root.rglob("*.mp4")
+                ]
+            }
+        )
+
+    @app.get("/subtitles")
+    def list_subtitles():
+        return json.dumps(
+            {
+                "data": [
+                    {"name": p.stem, "path": str(p)} for p in dummy.root.rglob("*.srt")
                 ]
             }
         )

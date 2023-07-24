@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- <title>TypeScript: Hello, World!</title> -->
     <style>
       .button {
         border: none;
@@ -29,12 +28,29 @@
     </style>
   </head>
   <body>
-    <h1>JBO</h1>
-    <p>Movie list:</p>
-    <ul id="myList"></ul>
-    <button class="button button1">Start</button>
-    <button class="button button2">Pause</button>
-    <button class="button button3", onclick=stopVideo()>Stop</button>
-    <script src="{{ url_for('static', filename='app.js') }}"></script>
+    <div>
+      <h1>JBO</h1>
+      <p>Movie list:</p>
+      <ul id="myList"></ul>
+      <button class="button button1" , onclick="playVideo()">Play</button>
+      <button class="button button2" , onclick="stopVideo()">Stop</button>
+      <!-- <button class="button button3" , onclick="pauseVideo()">Pause</button> -->
+      <script src="{{ url_for('static', filename='app.js') }}"></script>
+    </div>
+
+    <!-- form data -->
+    <div>
+      <!-- A button to open the popup form -->
+      <button class="open-button" onclick="openForm()">Subtitles</button>
+
+      <!-- subtitle picker -->
+      <div class="form-popup" id="myForm">
+        <form action="" class="form-container">
+          <h1>Subtitles</h1>
+          <ul id="subList"></ul>
+        </form>
+      </div>
+    </div>
+    <!-- form data -->
   </body>
 </html>
