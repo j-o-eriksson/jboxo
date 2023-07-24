@@ -1,5 +1,7 @@
+//
+
 const fetchVideos = async (): Promise<string> => {
-  const api = "http://192.168.0.189:5000/videos";
+  const api = "/videos";
   try {
     const response = await fetch(api, { mode: "cors" });
     const { data } = await response.json();
@@ -12,7 +14,7 @@ const fetchVideos = async (): Promise<string> => {
 };
 
 const addVideo = async (path: string): Promise<string> => {
-  const api = "http://192.168.0.189:5000/control/add";
+  const api = "/control/add";
   try {
     const response = await fetch(api, {
       method: "POST",
@@ -29,7 +31,7 @@ const addVideo = async (path: string): Promise<string> => {
 };
 
 const stopVideo = async (): Promise<string> => {
-  const api = "http://192.168.0.189:5000/control/stop";
+  const api = "/control/stop";
   try {
     const response = await fetch(api, {
       method: "POST",

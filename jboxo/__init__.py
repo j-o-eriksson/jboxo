@@ -3,16 +3,10 @@ import json
 import subprocess
 from pathlib import Path
 
-from flask import Flask, request
+from flask import Flask, request, render_template
 from flask_cors import CORS
 
 from .vlcsession import VLCSession
-
-
-def _get_duration(path: Path) -> int:
-    """Uses ffmpeg to get the duration in seconds of a video."""
-    cmd = f"ffprobe -i '{path}' -show_entries format=duration -v quiet -of csv='p=0'"
-    return int(float(subprocess.check_output(cmd, shell=True).decode("utf-8").strip()))
 
 
 class Dummy:
@@ -42,7 +36,6 @@ class Dummy:
         return json.dumps(
             {
                 "name": video_path.stem,
-                # "duration": _get_duration(self.root / video_path),
                 "duration": _get_duration(video_path),
                 "subtitles": [],
             }
@@ -105,6 +98,12 @@ def create_app():
 
     @app.route("/")
     def hello_world():
-        return "<p>Hello, World!</p>"
+        return render_template("index.html")
 
     return app
+
+
+def _get_duration(path: Path) -> int:
+    """Uses ffmpeg to get the duration in seconds of a video."""
+    cmd = f"ffprobe -i '{path}' -show_entries format=duration -v quiet -of csv='p=0'"
+    return int(float(subprocess.check_output(cmd, shell=True).decode("utf-8").strip()))

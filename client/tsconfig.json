@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "ESNext",
+      "dom"
+    ]
+  },
+  "files": [
+    "app.ts"
+  ]
+}

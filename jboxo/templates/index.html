@@ -35,6 +35,6 @@
     <button class="button button1">Start</button>
     <button class="button button2">Pause</button>
     <button class="button button3", onclick=stopVideo()>Stop</button>
-    <script src="app.js"></script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
   </body>
 </html>
