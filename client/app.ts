@@ -1,50 +1,51 @@
 //
 
-const fetchVideos = async (): Promise<string> => {
-  const api = "/videos";
+const request = async (
+  callback: (r: Response) => any,
+  endpoint: string,
+  init?: RequestInit,
+) => {
   try {
-    const response = await fetch(api, { mode: "cors" });
-    const { data } = await response.json();
-    return data;
+    const response = await fetch(endpoint, init);
+    return callback(response);
   } catch (error) {
-    if (error) {
-      return error.message;
-    }
+    return error.message;
   }
 };
 
-const addVideo = async (path: string): Promise<string> => {
-  const api = "/control/add";
-  try {
-    const response = await fetch(api, {
+const fetchVideos = async () => {
+  return request(
+    async (response: Response) => {
+      const { data } = await response.json();
+      return data;
+    },
+    "/videos",
+  );
+};
+
+const addVideo = async (path: string) => {
+  return request(
+    async (r: Response) => {
+      return await r.text();
+    },
+    "/control/add",
+    {
       method: "POST",
-      mode: "cors",
       body: JSON.stringify({ videoPath: path }),
-    });
-    const text = await response.text();
-    return text;
-  } catch (error) {
-    if (error) {
-      return error.message;
-    }
-  }
+    },
+  );
 };
 
-const stopVideo = async (): Promise<string> => {
-  const api = "/control/stop";
-  try {
-    const response = await fetch(api, {
+const stopVideo = async () => {
+  return request(
+    async (r: Response) => {
+      return await r.text();
+    },
+    "/control/stop",
+    {
       method: "POST",
-      mode: "cors",
-    });
-    const text = await response.text();
-    console.log(`stop video returned ${text}`);
-    return text;
-  } catch (error) {
-    if (error) {
-      return error.message;
-    }
-  }
+    },
+  );
 };
 
 (async () => {

@@ -3,8 +3,7 @@ import json
 import subprocess
 from pathlib import Path
 
-from flask import Flask, request, render_template
-from flask_cors import CORS
+from flask import Flask, render_template, request
 
 from .vlcsession import VLCSession
 
@@ -73,7 +72,6 @@ def create_app():
     dummy = Dummy()
 
     app = Flask(__name__)
-    CORS(app)
 
     @app.post("/control/<cmd>")
     def execute_command(cmd):
