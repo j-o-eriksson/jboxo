@@ -59,9 +59,9 @@ class Dummy:
         if self.video_path is None:
             return "fail"
 
-        cmd = f"cvlc {self.video_path} -f"
+        cmd = f"cvlc '{self.video_path}' -f"
         if self.subtitle_path:
-            cmd += f" --sub-file {self.subtitle_path}"
+            cmd += f" --sub-file '{self.subtitle_path}'"
 
         print("opening video with command:", cmd)
         self.subprocess = subprocess.Popen(shlex.split(cmd))
