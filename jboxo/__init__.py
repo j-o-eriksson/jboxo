@@ -8,7 +8,7 @@ from typing import Optional
 from flask import Flask, render_template, request
 
 
-class Dummy:
+class VLCWrapper:
     def __init__(self):
         """ """
         self.root = Path("/home/jon/Downloads")
@@ -30,6 +30,16 @@ class Dummy:
             raise ValueError("Invalid command.")
 
         self.m[cmd]()
+
+    def get_videos(self):
+        return {
+            "data": [{"name": p.stem, "path": str(p)} for p in self.root.rglob("*.mp4")]
+        }
+
+    def get_subtitles(self):
+        return {
+            "data": [{"name": p.stem, "path": str(p)} for p in self.root.rglob("*.srt")]
+        }
 
     def get_video_info(self, video_path: Path) -> str:
         return json.dumps(
@@ -75,10 +85,8 @@ class Dummy:
 def create_app():
     """Initializes REST backend."""
 
-    dummy = Dummy()
-
+    dummy = VLCWrapper()
     app = Flask(__name__)
-    print(app.config)
 
     @app.post("/control/<cmd>")
     def execute_command(cmd):
@@ -90,25 +98,11 @@ def create_app():
 
     @app.get("/videos")
     def list_videos():
-        return json.dumps(
-            {
-                "data": [
-                    {"name": p.stem, "path": str(p)} for p in dummy.root.rglob("*.mp4")
-                ]
-            },
-            indent=2,
-        )
+        return json.dumps(dummy.get_videos(), indent=2)
 
     @app.get("/subtitles")
     def list_subtitles():
-        return json.dumps(
-            {
-                "data": [
-                    {"name": p.stem, "path": str(p)} for p in dummy.root.rglob("*.srt")
-                ]
-            },
-            indent=2,
-        )
+        return json.dumps(dummy.get_subtitles(), indent=2)
 
     @app.post("/info")  # TODO: ideally, this should be GET info/<path>
     def object_info():
