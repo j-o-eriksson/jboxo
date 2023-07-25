@@ -68,13 +68,13 @@ const stopVideo = async () => {
 
 const populateList = (list: HTMLElement, items: any) => {
   for (let item of items) {
-    let li = document.createElement("li");
-
     let a = document.createElement("a");
     a.innerText = item["name"];
+    a.setAttribute("path", item["path"]);
+
+    let li = document.createElement("li");
     li.appendChild(a);
 
-    li.setAttribute("path", item["path"]);
     list?.appendChild(li);
   }
 };
@@ -94,6 +94,7 @@ const openForm = async () => {
 
     (async () => {
       let response = await addVideoData("subtitles", path);
+      console.log(path);
       console.log(response);
     })();
 
