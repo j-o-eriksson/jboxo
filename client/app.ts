@@ -43,7 +43,9 @@ const addVideoData = async (type: string, path: string) => {
 const postBase = async (cmd: string) => {
   return makeRequest(
     async (r: Response) => {
-      return await r.text();
+      let text = await r.text();
+      console.log(text);
+      return text;
     },
     `/control/${cmd}`,
     {
@@ -64,18 +66,26 @@ const stopVideo = async () => {
   return postBase("stop");
 };
 
+const populateList = (list: HTMLElement, items: any) => {
+  for (let item of items) {
+    let li = document.createElement("li");
+
+    let a = document.createElement("a");
+    a.innerText = item["name"];
+    li.appendChild(a);
+
+    li.setAttribute("path", item["path"]);
+    list?.appendChild(li);
+  }
+};
+
 const openForm = async () => {
-  document.getElementById("myForm").style.display = "block";
+  // document.getElementById("myForm").style.display = "block";
   let stuff = await fetchSubtitles();
   console.log(stuff);
 
   let list = document.getElementById("subList");
-  for (let item of stuff) {
-    let li = document.createElement("li");
-    li.innerText = item["name"];
-    li.setAttribute("path", item["path"]);
-    list?.appendChild(li);
-  }
+  populateList(list, stuff);
 
   list?.addEventListener("click", (e) => {
     const item = e.target as HTMLElement;
@@ -87,37 +97,31 @@ const openForm = async () => {
       console.log(response);
     })();
 
-    list.innerHTML = "";
-    closeForm();
+    // list.innerHTML = "";
+    // closeForm();
   });
 };
 
-function closeForm() {
-  document.getElementById("myForm").style.display = "none";
-}
+// function closeForm() {
+//   document.getElementById("myForm").style.display = "none";
+// }
 
 (async () => {
   let stuff = await fetchVideos();
   console.log(stuff);
 
   let list = document.getElementById("myList");
-  for (let item of stuff) {
-    let li = document.createElement("li");
-    li.innerText = item["name"];
-    li.setAttribute("path", item["path"]);
-    list?.appendChild(li);
-  }
+  populateList(list, stuff);
 
   list?.addEventListener("click", (e) => {
     const item = e.target as HTMLElement;
     let path: string = item.getAttribute("path");
-    console.log(
-      `Clicked list element with name ${item.innerText} and content ${path}`,
-    );
 
     (async () => {
       let response = await addVideoData("video", path);
       console.log(response);
     })();
   });
+
+  openForm();
 })();

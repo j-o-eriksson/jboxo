@@ -3,7 +3,8 @@
     "lib": [
       "ESNext",
       "dom"
-    ]
+    ],
+    "outDir": "../jboxo/static/js",
   },
   "files": [
     "app.ts"

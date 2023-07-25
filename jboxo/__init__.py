@@ -78,6 +78,7 @@ def create_app():
     dummy = Dummy()
 
     app = Flask(__name__)
+    print(app.config)
 
     @app.post("/control/<cmd>")
     def execute_command(cmd):
@@ -94,7 +95,8 @@ def create_app():
                 "data": [
                     {"name": p.stem, "path": str(p)} for p in dummy.root.rglob("*.mp4")
                 ]
-            }
+            },
+            indent=2,
         )
 
     @app.get("/subtitles")
@@ -104,7 +106,8 @@ def create_app():
                 "data": [
                     {"name": p.stem, "path": str(p)} for p in dummy.root.rglob("*.srt")
                 ]
-            }
+            },
+            indent=2,
         )
 
     @app.post("/info")  # TODO: ideally, this should be GET info/<path>
