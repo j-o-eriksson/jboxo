@@ -10,12 +10,18 @@
     box-sizing: border-box;
 }
 
+/* html, body { */
+/*     max-width: 100%; */
+/*     overflow-x: hidden; */
+/* } */
+
 body {
     color: var(--main-color);
     font-size: 1.3em;
     font-family: sans-serif;
     display: grid;
     justify-content: center;
+    margin-left: 1.5em;
 }
 
 h2 {
@@ -62,7 +68,7 @@ button,
     margin: 0.3em 0;
     padding: 0.3em 1.3em;
     text-transform: uppercase;
-    min-width: 20ch;
+    min-width: 25%;
 }
 
 button:hover {
@@ -89,15 +95,15 @@ nav ul {
 
 ul {
   margin: 0;
-  padding-right: 2.5em;
-  padding-left: 2.5em;
+  padding-right: 0.5em;
+  padding-left: 0em;
 }
 
 li {
   /* float: left; */
   list-style: none;
   background-color: var(--main-color);
-  width: 100%;
+  max-width: 80%;
   /* margin-right: 30px; */
   /* text-align: center; */
   /* line-height: 60px; */
@@ -117,7 +123,7 @@ li a {
   margin: 0.3em 0;
   padding: 0.3em 1.3em;
   text-transform: uppercase;
-  min-width: 23ch;
+  /* min-width: 23ch; */
 }
 
 li a:hover {
