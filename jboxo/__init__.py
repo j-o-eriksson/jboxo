@@ -26,9 +26,6 @@ class VLCWrapper:
             self.vlcprocess.kill()
 
     def execute(self, cmd: str) -> None:
-        if cmd not in self.m:
-            raise ValueError("Invalid command.")
-
         self.m[cmd]()
 
     def get_videos(self):
@@ -93,8 +90,8 @@ def create_app():
         try:
             dummy.execute(cmd)
             return "Success", 200
-        except:
-            return "Not found", 404
+        except Exception as ex:
+            return f"Error: {str(ex)}", 404
 
     @app.get("/videos")
     def list_videos():
