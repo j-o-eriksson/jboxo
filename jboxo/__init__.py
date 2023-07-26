@@ -30,12 +30,12 @@ class VLCWrapper:
 
     def get_videos(self):
         return {
-            "data": [{"name": p.stem, "path": str(p)} for p in self.root.rglob("*.mp4")]
+            "data": [{"name": _clean_string(p.stem), "path": str(p)} for p in self.root.rglob("*.mp4")]
         }
 
     def get_subtitles(self):
         return {
-            "data": [{"name": p.stem, "path": str(p)} for p in self.root.rglob("*.srt")]
+            "data": [{"name": _clean_string(p.stem), "path": str(p)} for p in self.root.rglob("*.srt")]
         }
 
     def get_video_info(self, video_path: Path) -> str:
@@ -117,3 +117,7 @@ def _get_duration(path: Path) -> int:
     """Uses ffmpeg to get the duration in seconds of a video."""
     cmd = f"ffprobe -i '{path}' -show_entries format=duration -v quiet -of csv='p=0'"
     return int(float(subprocess.check_output(cmd, shell=True).decode("utf-8").strip()))
+
+def _clean_string(s: str) -> str:
+    d = {ord(c): " " for c in ".-[]"}
+    return s.translate(d)

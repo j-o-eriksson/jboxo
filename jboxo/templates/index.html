@@ -7,35 +7,19 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/style.css') }}"
     />
-    <script
-      src="{{ url_for('static', filename='js/index.js') }}"
-      type="module"
-    ></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
   </head>
   <body>
-
     <div>
       <h1>Bacon Box Office</h1>
       <p>Movie List:</p>
-      <nav><ul id="myList"></ul></nav>
-      <button class="button button1" , onclick="playVideo()">Play</button>
-      <button class="button button2" , onclick="stopVideo()">Stop</button>
-      <button class="button button3" , onclick="pauseVideo()">Pause</button>
-      <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+      <nav><ul id="myList"></ul> </nav>
+      <p>Subtitle List:</p>
+      <nav><ul id="subList"></ul> </nav>
+      <p>Control:</p>
+      <button class="button button1", onClick="playVideo()">Start</button>
+      <button class="button button2", onClick="pauseVideo()">Pause</button>
+      <button class="button button3", onClick="stopVideo()">Stop</button>
     </div>
-
-    <!-- form data -->
-    <div>
-      <!-- subtitle picker -->
-      <div class="form-popup" id="myForm">
-        <form action="" class="form-container">
-          <p>Subtitle List:</p>
-          <nav><ul id="subList"></ul></nav>
-        </form>
-      </div>
-      <!-- A button to open the popup form -->
-      <!-- <button class="open-button" onclick="openForm()">Subtitles</button> -->
-    </div>
-    {% if config['DEBUG'] %} {% include "_debug.html" %} {% endif %}
   </body>
 </html>

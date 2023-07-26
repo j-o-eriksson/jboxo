@@ -10,51 +10,20 @@
     box-sizing: border-box;
 }
 
-/* html, body { */
-/*     max-width: 100%; */
-/*     overflow-x: hidden; */
-/* } */
+html {
+  height: 100%;
+  overflow: hidden
+}
 
 body {
-    color: var(--main-color);
-    font-size: 1.3em;
-    font-family: sans-serif;
-    display: grid;
-    justify-content: center;
-    margin-left: 1.5em;
-}
+  color: var(--main-color);
+  font-size: 1.3em;
+  font-family: sans-serif;
+  display: grid;
+  justify-content: center;
 
-h2 {
-    margin: 0;
-    padding-bottom: 0.3em;
-}
-
-hr {
-    border: 1px solid var(--main-color);
-    border-bottom: none;
-}
-
-label {
-    display: block;
-}
-
-label span {
-    min-width: 9ch;
-    display: inline-block;
-}
-
-input {
-    border: 1px solid var(--main-color);
-    color: inherit;
-    padding: 0.3em;
-}
-
-.hidden {
-    display: none;
-}
-
-.editing {
-    background-color: var(--secondary-color) !important;
+  height: 100%;
+  overflow: hidden
 }
 
 button,
@@ -87,10 +56,10 @@ button:hover {
     color: var(--bg-color);
 }
 
-/* Experimental stuff... */
 nav ul {
-  height:200px; width:100%;
-  overflow:hidden; overflow-y:scroll;
+  height:150px;
+  overflow:hidden;
+  overflow-y:scroll;
 }
 
 ul {
@@ -100,10 +69,8 @@ ul {
 }
 
 li {
-  /* float: left; */
   list-style: none;
   background-color: var(--main-color);
-  max-width: 80%;
   /* margin-right: 30px; */
   /* text-align: center; */
   /* line-height: 60px; */
@@ -118,15 +85,9 @@ li a {
   border: 1px solid var(--main-color);
   color: var(--bg-color);
   cursor: pointer;
-  font-size: 0.5em;
+  font-size: 0.7em;
   font-weight: bold;
   margin: 0.3em 0;
   padding: 0.3em 1.3em;
   text-transform: uppercase;
-  /* min-width: 23ch; */
-}
-
-li a:hover {
-    background-color: var(--bg-color);
-    color: var(--main-color);
 }

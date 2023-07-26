@@ -80,7 +80,6 @@ const populateList = (list: HTMLElement, items: any) => {
 };
 
 const openForm = async () => {
-  // document.getElementById("myForm").style.display = "block";
   let stuff = await fetchSubtitles();
   console.log(stuff);
 
@@ -90,22 +89,13 @@ const openForm = async () => {
   list?.addEventListener("click", (e) => {
     const item = e.target as HTMLElement;
     let path: string = item.getAttribute("path");
-    console.log(path);
 
     (async () => {
       let response = await addVideoData("subtitles", path);
-      console.log(path);
       console.log(response);
     })();
-
-    // list.innerHTML = "";
-    // closeForm();
   });
 };
-
-// function closeForm() {
-//   document.getElementById("myForm").style.display = "none";
-// }
 
 (async () => {
   let stuff = await fetchVideos();
