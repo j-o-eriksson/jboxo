@@ -4,6 +4,7 @@
     --bg-color: white;
     --main-color: coral;
     --secondary-color: lavenderblush;
+    --tertiary-color: blanchedalmond;
 }
 
 * {
@@ -26,6 +27,17 @@ body {
   overflow: hidden
 }
 
+p {
+  /* padding: 1px; */
+  margin-bottom: 5px;
+  /* background-color: var(--secondary-color); */
+}
+
+.test {
+  /* background-color: var(--secondary-color); */
+}
+
+
 button,
 .button {
     background-color: var(--main-color);
@@ -37,23 +49,12 @@ button,
     margin: 0.3em 0;
     padding: 0.3em 1.3em;
     text-transform: uppercase;
-    min-width: 25%;
+    min-width: 30%;
 }
 
-button:hover {
+button:active {
     background-color: var(--bg-color);
     color: var(--main-color);
-}
-
-.button {
-    background-color: transparent;
-    color: var(--main-color);
-    cursor: pointer;
-}
-
-.button:hover {
-    background-color: var(--main-color);
-    color: var(--bg-color);
 }
 
 nav ul {
@@ -90,4 +91,9 @@ li a {
   margin: 0.3em 0;
   padding: 0.3em 1.3em;
   text-transform: uppercase;
+}
+
+li a:active {
+  background-color: var(--bg-color);
+  color: var(--main-color);
 }
