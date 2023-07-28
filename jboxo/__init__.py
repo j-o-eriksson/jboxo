@@ -9,6 +9,8 @@ from typing import Optional
 
 from flask import Flask, render_template, request
 
+import jboxo.utils as ju
+
 
 @dataclass
 class VideoData:
@@ -30,6 +32,7 @@ class VLCWrapper:
         }
         self.video_meta = VideoData(video_name="", video_path=Path())
         self.vlcprocess: Optional[subprocess.Popen] = None
+        self.video_provider = ju.VideoProvider()
 
     def __del__(self):
         if self.vlcprocess is not None:
@@ -55,7 +58,7 @@ class VLCWrapper:
     def _get_paths(self, extentions):
         files = (f for f in self.root.rglob("*") if f.suffix in extentions)
         return {
-            "data": [{"name": _clean_string(p.stem), "path": str(p)} for p in files]
+            "data": [{"name": ju.clean_string(p.stem), "path": str(p)} for p in files]
         }
 
     def _add(self) -> None:
@@ -64,10 +67,12 @@ class VLCWrapper:
         datatype = data["type"]
 
         if datatype == "video":
-            self.video_meta.video_name = _clean_string(path.stem)
+            name = ju.clean_string(path.stem)
+            self.video_meta.video_name = name
             self.video_meta.video_path = path
+            self.video_meta.duration = self.video_provider.get_meta(name)
         elif datatype == "subtitles":
-            self.video_meta.subtitle_name = _clean_string(path.stem)
+            self.video_meta.subtitle_name = ju.clean_string(path.stem)
             self.video_meta.subtitle_path = path
         else:
             raise ValueError("Invalid data type.")
@@ -127,13 +132,3 @@ def create_app():
         return render_template("index.html")
 
     return app
-
-
-def _get_duration(path: Path) -> int:
-    """Uses ffmpeg to get the duration in seconds of a video."""
-    cmd = f"ffprobe -i '{path}' -show_entries format=duration -v quiet -of csv='p=0'"
-    return int(float(subprocess.check_output(cmd, shell=True).decode("utf-8").strip()))
-
-
-def _clean_string(s: str) -> str:
-    return s.translate({ord(c): " " for c in ".-[]"})
