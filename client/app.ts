@@ -91,7 +91,7 @@ const updateInfo = async () => {
   console.log(info);
 
   let p1 = document.getElementById("videoInfo");
-  p1.innerHTML = `video: ${info["name"]}<br>subtitles: ${info["subtitle_name"]}`;
+  p1.innerHTML = `video: ${info["name"]}<br>subtitles: ${info["subtitle_name"]}<br>duration: ${info["video_duration_str"]}`;
 };
 
 const setupList = async (

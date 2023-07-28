@@ -25,7 +25,7 @@ class VideoProvider:
         with self.meta_path.open() as f:
             metadata = json.load(f)
             for video_path in self.videopaths:
-                video_id = clean_string(str(video_path))
+                video_id = clean_string(str(video_path.stem))
                 if video_id not in metadata:
                     print(f"retrieving duration for {video_id}")
                     metadata[video_id] = _get_duration(video_path)

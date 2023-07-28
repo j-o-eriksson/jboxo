@@ -108,12 +108,8 @@ def create_app():
 
     @app.post("/control/<cmd>")
     def execute_command(cmd):
-        try:
-            dummy.execute(cmd)
-            return "Success", 200
-        except Exception as ex:
-            print(ex)
-            return f"Error: {str(ex)}", 404
+        dummy.execute(cmd)
+        return "Success", 200
 
     @app.get("/videos")
     def list_videos():
