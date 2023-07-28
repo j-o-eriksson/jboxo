@@ -3,8 +3,8 @@ import json
 import shlex
 import subprocess
 from dataclasses import dataclass
-from pathlib import Path
 from datetime import timedelta
+from pathlib import Path
 from typing import Optional
 
 from flask import Flask, render_template, request
@@ -50,15 +50,13 @@ class VLCWrapper:
     def get_subtitles(self):
         return self._get_paths({".srt"})
 
-    def get_selected_info(self) -> str:
-        return json.dumps(
-            {
-                "name": self.video_meta.video_name,
-                "subtitle_name": self.video_meta.subtitle_name,
-                "video_duration": self.video_meta.duration,
-                "video_duration_str": str(timedelta(seconds=self.video_meta.duration)),
-            }
-        )
+    def get_selected_info(self):
+        return {
+            "name": self.video_meta.video_name,
+            "subtitle_name": self.video_meta.subtitle_name,
+            "video_duration": self.video_meta.duration,
+            "video_duration_str": str(timedelta(seconds=self.video_meta.duration)),
+        }
 
     def _add(self) -> None:
         data = ast.literal_eval(request.data.decode("utf-8"))
@@ -78,12 +76,13 @@ class VLCWrapper:
         if self.vlcprocess is not None:
             self.vlcprocess.kill()
 
-        if self.video_path is None:
+        if self.video_meta.video_path is None:
             raise ValueError("Video path not set.")
 
-        cmd = f"cvlc '{str(self.video_path)}' -f"
-        if self.subtitle_path is not None:
-            cmd += f" --sub-file 'str({self.subtitle_path})'"
+        cmd = f"cvlc '{str(self.video_meta.video_path)}' -f"
+
+        if self.video_meta.subtitle_path is not None:
+            cmd += f" --sub-file 'str({self.video_meta.subtitle_path})'"
 
         if seek_time is not None:
             cmd += f" --start-time={seek_time}"
@@ -121,7 +120,7 @@ def create_app():
 
     @app.get("/selected")
     def get_selected_info():
-        return dummy.get_selected_info()
+        return json.dumps(dummy.get_selected_info(), indent=2)
 
     @app.route("/")
     def hello_world():

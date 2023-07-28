@@ -27,6 +27,10 @@ body {
   overflow: hidden
 }
 
+p {
+  max-width: 80%;
+}
+
 .test {
   /* background-color: var(--tertiary-color); */
   margin-bottom: 10px;

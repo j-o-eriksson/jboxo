@@ -27,6 +27,13 @@ const fetchSubtitles = async () => {
   }, "/subtitles");
 };
 
+const fetchInfo = async () => {
+  return makeRequest(async (response: Response) => {
+    const data = await response.json();
+    return data;
+  }, "/selected");
+};
+
 const addVideoData = async (type: string, path: string) => {
   return makeRequest(
     async (r: Response) => {
@@ -79,11 +86,23 @@ const populateList = (list: HTMLElement, items: any) => {
   }
 };
 
-const openForm = async () => {
-  let stuff = await fetchSubtitles();
+const updateInfo = async () => {
+  let info = await fetchInfo();
+  console.log(info);
+
+  let p1 = document.getElementById("videoInfo");
+  p1.innerHTML = `video: ${info["name"]}<br>subtitles: ${info["subtitle_name"]}`;
+};
+
+const setupList = async (
+  fetchFunction: () => Promise<any>,
+  listId: string,
+  typeStr: string,
+) => {
+  let stuff = await fetchFunction();
   console.log(stuff);
 
-  let list = document.getElementById("subList");
+  let list = document.getElementById(listId);
   populateList(list, stuff);
 
   list?.addEventListener("click", (e) => {
@@ -91,28 +110,14 @@ const openForm = async () => {
     let path: string = item.getAttribute("path");
 
     (async () => {
-      let response = await addVideoData("subtitles", path);
+      let response = await addVideoData(typeStr, path);
       console.log(response);
+      await updateInfo();
     })();
   });
 };
 
 (async () => {
-  let stuff = await fetchVideos();
-  console.log(stuff);
-
-  let list = document.getElementById("myList");
-  populateList(list, stuff);
-
-  list?.addEventListener("click", (e) => {
-    const item = e.target as HTMLElement;
-    let path: string = item.getAttribute("path");
-
-    (async () => {
-      let response = await addVideoData("video", path);
-      console.log(response);
-    })();
-  });
-
-  openForm();
+  setupList(fetchVideos, "myList", "video");
+  setupList(fetchSubtitles, "subList", "subtitles");
 })();
