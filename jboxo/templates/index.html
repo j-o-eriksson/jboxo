@@ -11,17 +11,18 @@
   </head>
   <body>
     <div>
-      <h1>Bacon Box Office</h1>
+      <h2>Bacon Box Office</h2>
       <div class="test">
-        <p>Movie List:</p>
+        <label>Movies</label>
         <nav><ul id="myList"></ul> </nav>
       </div>
       <div class="test">
-        <p>Subtitle List:</p>
+        <label>Subtitles</label>
         <nav><ul id="subList"></ul> </nav>
       </div>
       <div class="test">
-        <p>Control:</p>
+        <label>Stuff</label>
+        <progress id="videoProgress" value="32" max="100"></progress><br>
         <button onClick="playVideo()">Start</button>
         <button onClick="pauseVideo()">Pause</button>
         <button onClick="stopVideo()">Stop</button>
