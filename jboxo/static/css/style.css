@@ -29,6 +29,8 @@ body {
 
 p {
   max-width: 80%;
+  font-size: 0.4em;
+  text-transform: uppercase;
 }
 
 .test {

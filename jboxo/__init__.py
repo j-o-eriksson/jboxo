@@ -136,5 +136,4 @@ def _get_duration(path: Path) -> int:
 
 
 def _clean_string(s: str) -> str:
-    d = {ord(c): " " for c in ".-[]"}
-    return s.translate(d)
+    return s.translate({ord(c): " " for c in ".-[]"})
