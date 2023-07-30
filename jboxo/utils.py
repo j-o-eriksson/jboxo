@@ -3,10 +3,6 @@ import subprocess
 from pathlib import Path
 
 
-def clean_string(s: str) -> str:
-    return s.translate({ord(c): " " for c in ".-[]"})
-
-
 class VideoProvider:
     def __init__(self):
         self.meta_path = Path("/home/jon/.bbo/meta.json")
@@ -21,7 +17,7 @@ class VideoProvider:
         return self.metadata[video_id]
 
     def refresh(self):
-        self.video_paths = self._get_paths({".mp4"})
+        self.video_paths = self._get_paths({".mp4", ".mkv"})
         self.sub_paths = self._get_paths({".srt"})
         self.metadata = self._init_meta()
 
@@ -41,6 +37,10 @@ class VideoProvider:
 
     def _get_paths(self, extentions):
         return [f for f in self.root_path.rglob("*") if f.suffix in extentions]
+
+
+def clean_string(s: str) -> str:
+    return s.translate({ord(c): " " for c in ".-[]"})
 
 
 def _get_duration(path: Path) -> int:
