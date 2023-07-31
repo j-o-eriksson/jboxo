@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,23 +9,32 @@
     />
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
   </head>
+
   <body>
-      <h2>Bacon Box Office</h2>
-      <div class="test">
-        <label>Movies</label>
-        <nav><ul id="myList"></ul> </nav>
-      </div>
-      <div class="test">
-        <label>Subtitles</label>
-        <nav><ul id="subList"></ul> </nav>
-      </div>
-      <div class="test">
-        <label>Play</label>
-        <p id="videoInfo">video:<br>subtitles:</p>
-        <progress id="videoProgress" value="32" max="100"></progress><br>
-        <button onClick="playVideo()">Start</button>
-        <button onClick="pauseVideo()">Pause</button>
-        <button onClick="stopVideo()">Stop</button>
-      </div>
+    <h2>Bacon Box Office</h2>
+
+    <label>movies</label>
+    <div class="wrapper" id="myList">
+      <ul></ul>
+    </div>
+
+    <label>subtitles</label>
+    <div class="wrapper" id="subList">
+      <ul></ul>
+    </div>
+
+    <div class="info">
+      <p id="videoInfo">video:<br />subtitles:<br />duration:</p>
+    </div>
+
+    <div class="progress">
+      <progress id="videoProgress" value="32" max="100"></progress><br />
+    </div>
+
+    <div class="stuff">
+      <button onClick="playVideo()">Start</button>
+      <button onClick="pauseVideo()">Pause</button>
+      <button onClick="stopVideo()">Stop</button>
+    </div>
   </body>
 </html>

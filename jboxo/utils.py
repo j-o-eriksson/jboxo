@@ -43,6 +43,11 @@ def clean_string(s: str) -> str:
     return s.translate({ord(c): " " for c in ".-[]"})
 
 
+def wake_screen() -> None:
+    cmd = f"xset -dpms && xset +dpms"
+    subprocess.run(cmd, shell=True)
+
+
 def _get_duration(path: Path) -> int:
     cmd = f"ffprobe -i '{path}' -show_entries format=duration -v quiet -of csv='p=0'"
     return int(float(subprocess.check_output(cmd, shell=True).decode("utf-8").strip()))

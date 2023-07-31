@@ -13,25 +13,23 @@ const makeRequest = async (
   }
 };
 
-const fetchVideos = async () => {
+const fetchData = async (path: string) => {
   return makeRequest(async (response: Response) => {
     const { data } = await response.json();
     return data;
-  }, "/videos");
+  }, path);
+};
+
+const fetchVideos = async () => {
+  return fetchData("/videos")
 };
 
 const fetchSubtitles = async () => {
-  return makeRequest(async (response: Response) => {
-    const { data } = await response.json();
-    return data;
-  }, "/subtitles");
+  return fetchData("/subtitles")
 };
 
 const fetchInfo = async () => {
-  return makeRequest(async (response: Response) => {
-    const data = await response.json();
-    return data;
-  }, "/selected");
+  return fetchData("/selected")
 };
 
 const addVideoData = async (type: string, path: string) => {
@@ -54,7 +52,7 @@ const postBase = async (cmd: string) => {
       console.log(text);
       return text;
     },
-    `/control/${cmd}`,
+    cmd,
     {
       method: "POST",
     },
@@ -62,15 +60,19 @@ const postBase = async (cmd: string) => {
 };
 
 const playVideo = async () => {
-  return postBase("play");
+  return postBase("control/play");
 };
 
 const pauseVideo = async () => {
-  return postBase("pause");
+  return postBase("control/pause");
 };
 
 const stopVideo = async () => {
-  return postBase("stop");
+  return postBase("control/stop");
+};
+
+const wakeScreen = async () => {
+  return postBase("control/wake");
 };
 
 const populateList = (list: HTMLElement, items: any) => {

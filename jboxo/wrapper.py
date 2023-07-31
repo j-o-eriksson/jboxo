@@ -48,10 +48,12 @@ class VLCWrapper:
 
     def get_selected_info(self):
         return {
-            "name": self.video_meta.video_name,
-            "subtitle_name": self.video_meta.subtitle_name,
-            "video_duration": self.video_meta.duration,
-            "video_duration_str": str(timedelta(seconds=self.video_meta.duration)),
+            "data": {
+                "name": self.video_meta.video_name,
+                "subtitle_name": self.video_meta.subtitle_name,
+                "video_duration": self.video_meta.duration,
+                "video_duration_str": str(timedelta(seconds=self.video_meta.duration)),
+            }
         }
 
     def _get_paths(self, paths):
