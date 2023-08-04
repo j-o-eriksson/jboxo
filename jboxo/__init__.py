@@ -36,6 +36,7 @@ def create_app():
 
     @app.route("/")
     def index():
+        # return send_from_directory(f"{app.root_path}/../frontend/build", "index.html")
         return render_template("index.html")
 
     @app.route("/favicon.ico")
