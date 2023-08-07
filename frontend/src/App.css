@@ -1,0 +1,95 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: white;
+  color: coral;
+  font-family: "Roboto", sans-serif;
+  margin: 20px;
+  overflow: hidden;
+}
+
+.container {
+  width: 300px;
+  margin: 0 auto;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.tabs button {
+  background-color: white;
+  color: coral;
+  opacity: 0.6;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  width: 100%;
+  /* transition: all 0.5s ease-out; */
+
+  text-transform: uppercase;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+/* .tabs button:hover { */
+/*   background-color: white; */
+/*   color: coral; */
+/*   opacity: 1.0; */
+/*   border-bottom: 2px solid coral; */
+/* } */
+
+.tabs button:disabled {
+  background-color: white;
+  color: coral;
+  opacity: 1.0;
+  border-bottom: 2px solid coral;
+}
+
+nav {
+  height:150px;
+  overflow:hidden;
+  overflow-y:scroll;
+  margin-bottom: 10px;
+}
+
+.stuff ul {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+
+.stuff li {
+  list-style: none;
+  width: 300px;
+}
+
+.stuff li a {
+  display: block;
+  text-transform: uppercase;
+  font-size: 0.7em;
+  font-weight: bold;
+  color: white;
+  background-color: coral;
+  border: 1px solid coral;
+
+  margin: 0.3em 0;
+  padding: 2px 5px;
+}
+
+.stuff li a:hover {
+  background-color: white;
+  color: coral;
+}
+
+.stuff p {
+  text-align: left;
+  font-size: 0.6em;
+  text-transform: uppercase;
+}
