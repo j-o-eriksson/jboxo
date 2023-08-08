@@ -1,36 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { addVideoData, fetchInfo } from "../utils";
+import { Info } from "./info";
+import * as utils from "../utils";
 
-type Video = {
-  name: string;
-  path: string;
-};
+type InfoCallback = React.Dispatch<React.SetStateAction<utils.VideoInfo>>;
 
-type VideoInfo = {
-  name: string;
-  subtitles: string;
-  duration: string;
-};
-
-export default function Main() {
-  const [videos, setVideo] = useState<Video[]>([]);
-
-  const fetchData = async () => {
-    const response = await fetch("/videos");
-    const { data } = await response.json();
-    setVideo(data);
-  };
+export const Main: React.FC<{
+  info: utils.VideoInfo;
+  setInfo: InfoCallback;
+}> = ({ info, setInfo }) => {
+  const [videos, setVideo] = useState<utils.Video[]>([]);
 
   useEffect(() => {
-    fetchData();
+    utils.fetchData(setVideo);
+    utils.fetchInfo(setInfo);
   }, []);
 
-  return <MyList videos={videos} />;
-}
+  return (
+    <div>
+      <MyList videos={videos} setInfo={setInfo} />
+      <Info info={info} />
+    </div>
+  );
+};
 
 type ListProps = {
-  video: Video;
-  callback: React.Dispatch<React.SetStateAction<VideoInfo>>;
+  video: utils.Video;
+  callback: React.Dispatch<React.SetStateAction<utils.VideoInfo>>;
 };
 
 const MyListItem: React.FC<ListProps> = ({ video, callback }) => {
@@ -38,8 +33,8 @@ const MyListItem: React.FC<ListProps> = ({ video, callback }) => {
     <li
       key={video.name}
       onClick={async () => {
-        await addVideoData(video.path);
-        await fetchInfo(callback);
+        await utils.addVideoData(video.path);
+        await utils.fetchInfo(callback);
       }}
     >
       <a>{video.name}</a>
@@ -47,35 +42,17 @@ const MyListItem: React.FC<ListProps> = ({ video, callback }) => {
   );
 };
 
-const MyList: React.FC<{ videos: Video[] }> = ({ videos }) => {
-  const [info, setInfo] = useState<VideoInfo>({
-    name: "-",
-    subtitles: "-",
-    duration: "-",
-  });
-
+const MyList: React.FC<{
+  videos: utils.Video[];
+  setInfo: InfoCallback;
+}> = ({ videos, setInfo }) => {
   return (
-    <div className="stuff">
-      <nav>
-        <ul>
-          {videos.map((video) => (
-            <MyListItem key={video.name} video={video} callback={setInfo} />
-          ))}
-        </ul>
-      </nav>
-      <Info info={info} />
-    </div>
-  );
-};
-
-const Info: React.FC<{ info: VideoInfo }> = ({ info }) => {
-  return (
-    <p>
-      <b>name:</b> {info.name}
-      <br />
-      <b>subtitles:</b> {info.subtitles}
-      <br />
-      <b>duration</b>: {info.duration}
-    </p>
+    <nav>
+      <ul>
+        {videos.map((video) => (
+          <MyListItem key={video.name} video={video} callback={setInfo} />
+        ))}
+      </ul>
+    </nav>
   );
 };

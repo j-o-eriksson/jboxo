@@ -1,8 +1,12 @@
 import { useState } from "react";
-import Main from "./main";
+import { getDefaultInfo } from "../utils";
+import { Info } from "./info";
+import { Main } from "./main";
 
 const Tabs = () => {
   const [currentTab, setCurrentTab] = useState("1");
+  const [info, setInfo] = useState(getDefaultInfo);
+
   const tabs = [
     {
       id: "1",
@@ -35,13 +39,11 @@ const Tabs = () => {
         ))}
       </div>
       <div className="content">
-        <div key="1">{currentTab === "1" && <Main />}</div>
-        <div key="2">
-          {currentTab === "2" && (
-            <div>
-              <p className="title">Hello 2</p>
-            </div>
-          )}
+        <div key="1" className="stuff">
+          {currentTab === "1" && <Main info={info} setInfo={setInfo} />}
+        </div>
+        <div key="2" className="stuff">
+          {currentTab === "2" && <Info info={info} />}
         </div>
       </div>
     </div>
