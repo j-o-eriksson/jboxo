@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import * as utils from "../utils";
-import { Info } from "./info";
 import { Main } from "./main";
+import { Play } from "./play";
 
 const Tabs = () => {
   const [currentTab, setCurrentTab] = useState("1");
@@ -22,6 +22,9 @@ const Tabs = () => {
     },
   ];
 
+  const tab1 = <Main info={info} setInfo={setInfo} />;
+  const tab2 = <Play info={info} setInfo={setInfo} />;
+
   return (
     <div className="container">
       <div className="tabs">
@@ -40,46 +43,13 @@ const Tabs = () => {
       </div>
       <div className="content">
         <div key="1" className="stuff">
-          {currentTab === "1" && <Main info={info} setInfo={setInfo} />}
+          {currentTab === "1" && tab1}
         </div>
         <div key="2" className="stuff">
-          {currentTab === "2" && (
-            <div>
-              <Info info={info} />
-              <SubPicker setInfo={setInfo} />
-            </div>
-          )}
+          {currentTab === "2" && tab2}
         </div>
       </div>
     </div>
-  );
-};
-
-const SubPicker: React.FC<{ setInfo: utils.InfoCallback }> = ({ setInfo }) => {
-  const [subtitles, setSubtitles] = useState<utils.Video[]>([]);
-
-  useEffect(() => {
-    utils.fetchData("/subtitles", setSubtitles);
-  }, []);
-
-  return (
-    <>
-      <label>subtitles:</label>
-      <select className="sub" name="selectedFruit">
-        {subtitles.map((sub, i) => (
-          <option
-            value={sub.path}
-            key={i}
-            onClick={async () => {
-              await utils.addVideoData("subtitles", sub.path);
-              await utils.fetchInfo(setInfo);
-            }}
-          >
-            {sub.name}
-          </option>
-        ))}
-      </select>
-    </>
   );
 };
 
