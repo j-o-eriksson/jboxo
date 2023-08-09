@@ -8,7 +8,7 @@ export const Info: React.FC<{ info: VideoInfo }> = ({ info }) => {
       <br />
       <b>subtitles:</b> {info.subtitles}
       <br />
-      <b>duration</b>: {info.duration}
+      <b>duration:</b> {info.duration}
     </p>
   );
 };

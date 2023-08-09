@@ -48,14 +48,14 @@ body {
 .tabs button:disabled {
   background-color: white;
   color: coral;
-  opacity: 1.0;
+  opacity: 1;
   border-bottom: 2px solid coral;
 }
 
 nav {
-  height:150px;
-  overflow:hidden;
-  overflow-y:scroll;
+  height: 150px;
+  overflow: hidden;
+  overflow-y: scroll;
   margin-bottom: 10px;
 }
 
@@ -92,4 +92,25 @@ nav {
   text-align: left;
   font-size: 0.6em;
   text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+label {
+  text-transform: uppercase;
+  font-size: 0.7em;
+  font-weight: bold;
+  color: coral;
+  background-color: white;
+}
+
+.sub {
+  text-transform: uppercase;
+  font-size: 0.7em;
+  font-weight: bold;
+  color: coral;
+  background-color: white;
+  border: 1px solid coral;
+  margin: 0 50px 50px 0;
+  padding: 5px;
+  width: 300px;
 }

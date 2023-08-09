@@ -2,16 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Info } from "./info";
 import * as utils from "../utils";
 
-type InfoCallback = React.Dispatch<React.SetStateAction<utils.VideoInfo>>;
-
 export const Main: React.FC<{
   info: utils.VideoInfo;
-  setInfo: InfoCallback;
+  setInfo: utils.InfoCallback;
 }> = ({ info, setInfo }) => {
   const [videos, setVideo] = useState<utils.Video[]>([]);
 
   useEffect(() => {
-    utils.fetchData(setVideo);
+    utils.fetchData("/videos", setVideo);
     utils.fetchInfo(setInfo);
   }, []);
 
@@ -23,18 +21,16 @@ export const Main: React.FC<{
   );
 };
 
-type ListProps = {
+const MyListItem: React.FC<{
   video: utils.Video;
-  callback: React.Dispatch<React.SetStateAction<utils.VideoInfo>>;
-};
-
-const MyListItem: React.FC<ListProps> = ({ video, callback }) => {
+  setInfo: utils.InfoCallback;
+}> = ({ video, setInfo }) => {
   return (
     <li
       key={video.name}
       onClick={async () => {
-        await utils.addVideoData(video.path);
-        await utils.fetchInfo(callback);
+        await utils.addVideoData("video", video.path);
+        await utils.fetchInfo(setInfo);
       }}
     >
       <a>{video.name}</a>
@@ -44,13 +40,13 @@ const MyListItem: React.FC<ListProps> = ({ video, callback }) => {
 
 const MyList: React.FC<{
   videos: utils.Video[];
-  setInfo: InfoCallback;
+  setInfo: utils.InfoCallback;
 }> = ({ videos, setInfo }) => {
   return (
     <nav>
       <ul>
         {videos.map((video) => (
-          <MyListItem key={video.name} video={video} callback={setInfo} />
+          <MyListItem key={video.name} video={video} setInfo={setInfo} />
         ))}
       </ul>
     </nav>
