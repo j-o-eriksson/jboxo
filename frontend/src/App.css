@@ -1,8 +1,8 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* * { */
+/*   margin: 0; */
+/*   padding: 0; */
+/*   box-sizing: border-box; */
+/* } */
 
 body {
   background-color: white;
@@ -24,31 +24,19 @@ body {
 }
 
 .tabs button {
-  background-color: white;
-  color: coral;
+  font-size: 0.8em;
   opacity: 0.6;
   border: none;
   cursor: pointer;
   padding: 5px;
   width: 100%;
   /* transition: all 0.5s ease-out; */
-
-  text-transform: uppercase;
-  font-size: 0.8em;
-  font-weight: bold;
 }
 
-/* .tabs button:hover { */
-/*   background-color: white; */
-/*   color: coral; */
-/*   opacity: 1.0; */
-/*   border-bottom: 2px solid coral; */
-/* } */
-
 .tabs button:disabled {
+  opacity: 1;
   background-color: white;
   color: coral;
-  opacity: 1;
   border-bottom: 2px solid coral;
 }
 
@@ -72,13 +60,8 @@ nav {
 
 .stuff li a {
   display: block;
-  text-transform: uppercase;
   font-size: 0.7em;
-  font-weight: bold;
-  color: white;
-  background-color: coral;
   border: 1px solid coral;
-
   margin: 0.3em 0;
   padding: 2px 5px;
 }
@@ -88,29 +71,73 @@ nav {
   color: coral;
 }
 
-.stuff p {
+.info {
   text-align: left;
   font-size: 0.6em;
-  text-transform: uppercase;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
 }
 
-label {
+.upper-bold {
   text-transform: uppercase;
-  font-size: 0.7em;
   font-weight: bold;
+}
+
+.col-a {
+  color: white;
+  background-color: coral;
+}
+
+.col-b {
   color: coral;
   background-color: white;
 }
 
-.sub {
-  text-transform: uppercase;
+.play-wrapper {
+  display: grid;
+  justify-content: center;
+}
+
+.myimg {
+  width: 200px;
+  height: 150px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.play-label {
   font-size: 0.7em;
-  font-weight: bold;
-  color: coral;
-  background-color: white;
+  border: 0px solid coral;
+  margin-bottom: 5px;
+}
+
+.play-select {
   border: 1px solid coral;
-  margin: 0 50px 50px 0;
+  font-size: 0.7em;
+  margin-bottom: 10px;
   padding: 5px;
   width: 300px;
+}
+
+.play-button {
+  border: 1px solid coral;
+  font-size: 0.6em;
+  padding: 2px 5px;
+  width: 98px;
+}
+
+.play-button:hover {
+  background-color: white;
+  color: coral;
+}
+
+.wrapper2 {
+  display: flex;
+  justify-content: space-between;
+}
+
+.seek {
+  width: 200px;
+  margin-bottom: 10px;
 }

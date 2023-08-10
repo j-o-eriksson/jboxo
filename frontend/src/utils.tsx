@@ -1,5 +1,3 @@
-// api.tsx
-
 import React from "react";
 
 export type InfoCallback = React.Dispatch<React.SetStateAction<VideoInfo>>;
@@ -46,4 +44,28 @@ export const fetchInfo = async (callback: any) => {
     subtitles: data.subtitle_name,
     duration: data.video_duration_str,
   });
+};
+
+const postBase = async (endpoint: string) => {
+  const response = await fetch(endpoint, {
+    method: "POST",
+  });
+  const text = await response.text();
+  console.log(`Post request to ${endpoint} returned: ${text}`);
+};
+
+export const playVideo = async () => {
+  return postBase("control/play");
+};
+
+export const pauseVideo = async () => {
+  return postBase("control/pause");
+};
+
+export const stopVideo = async () => {
+  return postBase("control/stop");
+};
+
+export const wakeScreen = async () => {
+  return postBase("control/wake");
 };

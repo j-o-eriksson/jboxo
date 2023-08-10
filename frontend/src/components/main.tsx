@@ -1,54 +1,55 @@
-import React, { useEffect, useState } from "react";
-import { Info } from "./info";
+import { useState } from "react";
+import { Play } from "./play";
+import { Browse } from "./browse";
 import * as utils from "../utils";
 
-export const Main: React.FC<{
-  info: utils.VideoInfo;
-  setInfo: utils.InfoCallback;
-}> = ({ info, setInfo }) => {
-  const [videos, setVideo] = useState<utils.Video[]>([]);
+const Main = () => {
+  const [currentTab, setCurrentTab] = useState("1");
+  const [info, setInfo] = useState(utils.getDefaultInfo);
 
-  useEffect(() => {
-    utils.fetchData("/videos", setVideo);
-    utils.fetchInfo(setInfo);
-  }, []);
+  const tabs = [
+    {
+      id: "1",
+      title: "videos",
+      content: <Browse info={info} setInfo={setInfo} />,
+    },
+    {
+      id: "2",
+      title: "play",
+      content: <Play info={info} setInfo={setInfo} />,
+    },
+    {
+      id: "3",
+      title: "info",
+      content: <p>Not implemented</p>,
+    },
+  ];
 
   return (
-    <div>
-      <MyList videos={videos} setInfo={setInfo} />
-      <Info info={info} />
+    <div className="container">
+      <div className="tabs">
+        {tabs.map((tab, i) => (
+          <button className="col-b upper-bold"
+            key={i}
+            id={tab.id}
+            disabled={currentTab === `${tab.id}`}
+            onClick={() => {
+              setCurrentTab(tab.id);
+            }}
+          >
+            {tab.title}
+          </button>
+        ))}
+      </div>
+      <div>
+        {tabs.map((tab) => (
+          <div key={tab.id}>
+            {currentTab === tab.id && tab.content}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
 
-const MyListItem: React.FC<{
-  video: utils.Video;
-  setInfo: utils.InfoCallback;
-}> = ({ video, setInfo }) => {
-  return (
-    <li
-      key={video.name}
-      onClick={async () => {
-        await utils.addVideoData("video", video.path);
-        await utils.fetchInfo(setInfo);
-      }}
-    >
-      <a>{video.name}</a>
-    </li>
-  );
-};
-
-const MyList: React.FC<{
-  videos: utils.Video[];
-  setInfo: utils.InfoCallback;
-}> = ({ videos, setInfo }) => {
-  return (
-    <nav>
-      <ul>
-        {videos.map((video) => (
-          <MyListItem key={video.name} video={video} setInfo={setInfo} />
-        ))}
-      </ul>
-    </nav>
-  );
-};
+export default Main;

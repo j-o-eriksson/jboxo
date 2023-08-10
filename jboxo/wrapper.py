@@ -16,8 +16,8 @@ class VideoData:
     video_name: str = ""
     video_path: Path = Path()
     duration: int = 0
-    subtitle_name: str = ""
-    subtitle_path: Path = Path()
+    subtitle_name: Optional[str] = None
+    subtitle_path: Optional[Path] = None
 
 
 class VLCWrapper:
@@ -96,3 +96,4 @@ class VLCWrapper:
     def _stop(self) -> None:
         if self.vlcprocess is not None:
             self.vlcprocess.kill()
+            self.vlcprocess = None

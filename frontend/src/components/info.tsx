@@ -3,7 +3,7 @@ import { VideoInfo } from "../utils";
 
 export const Info: React.FC<{ info: VideoInfo }> = ({ info }) => {
   return (
-    <p>
+    <p className="info upper-bold">
       <b>name:</b> {info.name}
       <br />
       <b>subtitles:</b> {info.subtitles}
