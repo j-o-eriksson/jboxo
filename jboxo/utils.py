@@ -5,8 +5,8 @@ from pathlib import Path
 
 class VideoProvider:
     def __init__(self):
-        self.meta_path = Path("/home/jon/.bbo/meta.json")
-        self.root_path = Path("/home/jon/Downloads")
+        self.meta_path = Path("~/.bbo/meta.json").expanduser()
+        self.root_path = Path("~/Downloads").expanduser()
         self.refresh()
 
     def __del__(self):

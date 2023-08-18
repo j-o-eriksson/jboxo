@@ -23,7 +23,7 @@ class VideoData:
 class VLCWrapper:
     def __init__(self):
         """ """
-        self.root = Path("/home/jon/Downloads")
+        self.root = Path("~/Downloads").expanduser()
         self.callbacks = {
             "add": self._add,
             "play": self._play,

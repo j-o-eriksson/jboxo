@@ -74,7 +74,7 @@ nav {
 .info {
   text-align: left;
   font-size: 0.6em;
-  /* margin-bottom: 10px; */
+  margin-bottom: 20px;
 }
 
 .upper-bold {
@@ -115,16 +115,16 @@ nav {
 .play-select {
   border: 1px solid coral;
   font-size: 0.7em;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   padding: 5px;
   width: 300px;
 }
 
 .play-button {
   border: 1px solid coral;
-  font-size: 0.6em;
-  padding: 2px 5px;
-  width: 98px;
+  font-size: 0.8em;
+  padding: 8px 5px;
+  width: 97px;
 }
 
 .play-button:hover {
@@ -139,5 +139,5 @@ nav {
 
 .seek {
   width: 200px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
