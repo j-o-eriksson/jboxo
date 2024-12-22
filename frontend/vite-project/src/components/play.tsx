@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Info } from "./info";
 import * as utils from "../utils";
-import bacon from "../bacon.jpg";
+import bacon from "../assets/bacon.jpg";
 
 export const Play: React.FC<{
   info: utils.VideoInfo;
@@ -28,7 +28,7 @@ const SubPicker: React.FC<{ setInfo: utils.InfoCallback }> = ({ setInfo }) => {
   const [subtitles, setSubtitles] = useState<utils.Video[]>([]);
 
   useEffect(() => {
-    utils.fetchData("/subtitles", setSubtitles);
+    utils.fetchData("/api/subtitles", setSubtitles);
   }, []);
 
   const subList = subtitles.map((sub, i) => (

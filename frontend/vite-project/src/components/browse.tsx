@@ -9,7 +9,7 @@ export const Browse: React.FC<{
   const [videos, setVideo] = useState<utils.Video[]>([]);
 
   useEffect(() => {
-    utils.fetchData("/videos", setVideo);
+    utils.fetchData("/api/videos", setVideo);
     utils.fetchInfo(setInfo);
   }, [setInfo]);
 
