@@ -1,16 +1,2 @@
-[build-system]
-requires = [
-    "setuptools >= 65",
-    "wheel >= 0.38",
-]
-build-backend = "setuptools.build_meta"
-
-[project]
-name = "bbo"
-version = "0.1.0"
-dependencies = [
-    "flask",
-]
-
-[tool.setuptools.packages.find]
-include = ["jboxo"]
+[tool.pyright]
+typeCheckingMode = "standard"
