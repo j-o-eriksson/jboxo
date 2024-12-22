@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Info } from "./info";
 import * as utils from "../utils";
+import bacon from "../assets/bacon.jpg";
 
 export const Browse: React.FC<{
   info: utils.VideoInfo;
@@ -33,7 +34,9 @@ const MyListItem: React.FC<{
         await utils.fetchInfo(setInfo);
       }}
     >
-      <a className="col-a upper-bold">{video.name}</a>
+      <img src={bacon} alt="bacon" />
+      <h3>{video.name}</h3>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
     </li>
   );
 };

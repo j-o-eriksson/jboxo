@@ -41,7 +41,7 @@ body {
 }
 
 nav {
-  height: 150px;
+  height: 250px;
   overflow: hidden;
   overflow-y: scroll;
   margin-bottom: 10px;
@@ -54,21 +54,28 @@ nav {
 }
 
 .stuff li {
-  list-style: none;
-  width: 300px;
+  padding: 10px;
+  overflow: auto;
+}
+ 
+.stuff li:hover {
+  background: #eee;
+  cursor: pointer;
 }
 
-.stuff li a {
-  display: block;
-  font-size: 0.7em;
-  border: 1px solid coral;
-  margin: 0.3em 0;
-  padding: 2px 5px;
+.stuff li h3 {
+  font: bold 15px/1.5 Helvetica, Verdana, sans-serif;
 }
-
-.stuff li a:hover {
-  background-color: white;
-  color: coral;
+ 
+.stuff li img {
+  float: left;
+  margin: 0 15px 0 0;
+  width: 75px;
+  height: 100px;
+}
+ 
+.stuff li p {
+  font: 200 10px/1.5 Georgia, Times New Roman, serif;
 }
 
 .info {
@@ -98,7 +105,7 @@ nav {
 }
 
 .myimg {
-  width: 200px;
+  width: 150px;
   height: 150px;
   margin-left: auto;
   margin-right: auto;
