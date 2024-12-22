@@ -1,42 +1,143 @@
-#root {
-  max-width: 1280px;
+/* * { */
+/*   margin: 0; */
+/*   padding: 0; */
+/*   box-sizing: border-box; */
+/* } */
+
+body {
+  background-color: white;
+  color: coral;
+  font-family: "Roboto", sans-serif;
+  margin: 20px;
+  overflow: hidden;
+}
+
+.container {
+  width: 300px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.tabs button {
+  font-size: 0.8em;
+  opacity: 0.6;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  width: 100%;
+  /* transition: all 0.5s ease-out; */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.tabs button:disabled {
+  opacity: 1;
+  background-color: white;
+  color: coral;
+  border-bottom: 2px solid coral;
 }
 
-.card {
-  padding: 2em;
+nav {
+  height: 150px;
+  overflow: hidden;
+  overflow-y: scroll;
+  margin-bottom: 10px;
 }
 
-.read-the-docs {
-  color: #888;
+.stuff ul {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+
+.stuff li {
+  list-style: none;
+  width: 300px;
+}
+
+.stuff li a {
+  display: block;
+  font-size: 0.7em;
+  border: 1px solid coral;
+  margin: 0.3em 0;
+  padding: 2px 5px;
+}
+
+.stuff li a:hover {
+  background-color: white;
+  color: coral;
+}
+
+.info {
+  text-align: left;
+  font-size: 0.6em;
+  margin-bottom: 20px;
+}
+
+.upper-bold {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.col-a {
+  color: white;
+  background-color: coral;
+}
+
+.col-b {
+  color: coral;
+  background-color: white;
+}
+
+.play-wrapper {
+  display: grid;
+  justify-content: center;
+}
+
+.myimg {
+  width: 200px;
+  height: 150px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.play-label {
+  font-size: 0.7em;
+  border: 0px solid coral;
+  margin-bottom: 5px;
+}
+
+.play-select {
+  border: 1px solid coral;
+  font-size: 0.7em;
+  margin-bottom: 20px;
+  padding: 5px;
+  width: 300px;
+}
+
+.play-button {
+  border: 1px solid coral;
+  font-size: 0.8em;
+  padding: 8px 5px;
+  width: 97px;
+}
+
+.play-button:hover {
+  background-color: white;
+  color: coral;
+}
+
+.wrapper2 {
+  display: flex;
+  justify-content: space-between;
+}
+
+.seek {
+  width: 200px;
+  margin-bottom: 20px;
 }
