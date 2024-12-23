@@ -2,14 +2,17 @@ import json
 
 from flask import Flask, render_template, send_from_directory
 
-from jboxo.wrapper import VLCWrapper
 from jboxo.utils import wake_screen
+from jboxo.videoprovider import VideoProvider
+from jboxo.wrapper import VLCWrapper
 
 
 def create_app():
     """Initializes REST backend."""
 
-    wrapper = VLCWrapper()
+    provider = VideoProvider()
+    wrapper = VLCWrapper(provider)
+
     app = Flask(__name__)
 
     @app.get("/videos")

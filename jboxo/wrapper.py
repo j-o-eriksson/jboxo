@@ -1,27 +1,17 @@
 import ast
 import shlex
 import subprocess
-from dataclasses import dataclass
 from datetime import timedelta
 from pathlib import Path
-from typing import Optional
 
 from flask import request
 
-from jboxo.utils import VideoProvider, clean_string
-
-
-@dataclass
-class VideoData:
-    video_name: str = ""
-    video_path: Path = Path()
-    duration: int = 0
-    subtitle_name: Optional[str] = None
-    subtitle_path: Optional[Path] = None
+from jboxo.utils import clean_string
+from jboxo.videoprovider import VideoInfo, VideoProvider
 
 
 class VLCWrapper:
-    def __init__(self):
+    def __init__(self, video_provider: VideoProvider):
         """ """
         self.root = Path("~/Downloads").expanduser()
         self.callbacks = {
@@ -29,9 +19,9 @@ class VLCWrapper:
             "play": self._play,
             "stop": self._stop,
         }
-        self.video_meta = VideoData()
-        self.video_provider = VideoProvider()
-        self.vlcprocess: Optional[subprocess.Popen] = None
+        self.videoinfo = VideoInfo()
+        self.video_provider = video_provider
+        self.vlcprocess: subprocess.Popen | None = None
 
     def __del__(self):
         if self.vlcprocess is not None:
@@ -49,10 +39,10 @@ class VLCWrapper:
     def get_selected_info(self):
         return {
             "data": {
-                "name": self.video_meta.video_name,
-                "subtitle_name": self.video_meta.subtitle_name,
-                "video_duration": self.video_meta.duration,
-                "video_duration_str": str(timedelta(seconds=self.video_meta.duration)),
+                "name": self.videoinfo.video_name,
+                "subtitle_name": self.videoinfo.subtitle_name,
+                "video_duration": self.videoinfo.duration,
+                "video_duration_str": str(timedelta(seconds=self.videoinfo.duration)),
             }
         }
 
@@ -66,26 +56,26 @@ class VLCWrapper:
 
         if datatype == "video":
             name = clean_string(path.stem)
-            self.video_meta.video_name = name
-            self.video_meta.video_path = path
-            self.video_meta.duration = self.video_provider.get_meta(name)
+            self.videoinfo.video_name = name
+            self.videoinfo.video_path = path
+            self.videoinfo.duration = self.video_provider.get_meta(name)
         elif datatype == "subtitles":
-            self.video_meta.subtitle_name = clean_string(path.stem)
-            self.video_meta.subtitle_path = path
+            self.videoinfo.subtitle_name = clean_string(path.stem)
+            self.videoinfo.subtitle_path = path
         else:
             raise ValueError("Invalid data type.")
 
-    def _play(self, seek_time: Optional[int] = None) -> None:
+    def _play(self, seek_time: int | None = None) -> None:
         if self.vlcprocess is not None:
             return
 
-        if self.video_meta.video_path is None:
+        if self.videoinfo.video_path is None:
             raise ValueError("Video path not set.")
 
-        cmd = f"cvlc '{str(self.video_meta.video_path)}' -f"
+        cmd = f"cvlc '{str(self.videoinfo.video_path)}' -f"
 
-        if self.video_meta.subtitle_path is not None:
-            cmd += f" --sub-file '{str(self.video_meta.subtitle_path)}'"
+        if self.videoinfo.subtitle_path is not None:
+            cmd += f" --sub-file '{str(self.videoinfo.subtitle_path)}'"
 
         if seek_time is not None:
             cmd += f" --start-time={seek_time}"
