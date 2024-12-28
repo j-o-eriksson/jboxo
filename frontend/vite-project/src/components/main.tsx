@@ -11,7 +11,7 @@ const Main = () => {
     {
       id: "1",
       title: "videos",
-      content: <Browse info={info} setInfo={setInfo} />,
+      content: <Browse info={info} setInfo={setInfo} setCurrentTab={setCurrentTab} />,
     },
     {
       id: "2",

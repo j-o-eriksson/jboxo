@@ -1,11 +1,20 @@
 import React from "react";
 
 export type InfoCallback = React.Dispatch<React.SetStateAction<VideoInfo>>;
+export type TabCallback = React.Dispatch<React.SetStateAction<string>>;
 
 export type Video = {
+  id: number;
   name: string;
   path: string;
+  duration: string;
+  thumbnail: string;
 };
+
+export type Subtitle = {
+  name: string;
+  path: string;
+}
 
 export type VideoInfo = {
   name: string;
@@ -32,7 +41,7 @@ export const addVideoData = async (dataType: string, path: string) => {
 
 export const fetchData = async (endpoint: string, callback: any) => {
   const response = await fetch(endpoint);
-  const { data } = await response.json();
+  const data = await response.json();
   callback(data);
 };
 

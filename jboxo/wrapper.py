@@ -19,7 +19,7 @@ class VLCWrapper:
             "play": self._play,
             "stop": self._stop,
         }
-        self.videoinfo = VideoInfo()
+        self.videoinfo = VideoInfo(-1)
         self.video_provider = video_provider
         self.vlcprocess: subprocess.Popen | None = None
 
@@ -30,24 +30,21 @@ class VLCWrapper:
     def execute(self, cmd: str) -> None:
         self.callbacks[cmd]()
 
-    def get_videos(self):
-        return self._get_paths(self.video_provider.video_paths)
-
     def get_subtitles(self):
-        return self._get_paths(self.video_provider.sub_paths)
+        return [
+            {"name": clean_string(p.stem), "path": str(p)}
+            for p in self.video_provider.sub_paths
+        ]
 
     def get_selected_info(self):
         return {
             "data": {
-                "name": self.videoinfo.video_name,
+                "name": self.videoinfo.name,
                 "subtitle_name": self.videoinfo.subtitle_name,
                 "video_duration": self.videoinfo.duration,
                 "video_duration_str": str(timedelta(seconds=self.videoinfo.duration)),
             }
         }
-
-    def _get_paths(self, paths):
-        return {"data": [{"name": clean_string(p.stem), "path": str(p)} for p in paths]}
 
     def _add(self) -> None:
         data = ast.literal_eval(request.data.decode("utf-8"))
@@ -56,8 +53,8 @@ class VLCWrapper:
 
         if datatype == "video":
             name = clean_string(path.stem)
-            self.videoinfo.video_name = name
-            self.videoinfo.video_path = path
+            self.videoinfo.name = name
+            self.videoinfo.path = path
             self.videoinfo.duration = self.video_provider.get_meta(name)
         elif datatype == "subtitles":
             self.videoinfo.subtitle_name = clean_string(path.stem)
@@ -69,10 +66,10 @@ class VLCWrapper:
         if self.vlcprocess is not None:
             return
 
-        if self.videoinfo.video_path is None:
+        if self.videoinfo.path is None:
             raise ValueError("Video path not set.")
 
-        cmd = f"cvlc '{str(self.videoinfo.video_path)}' -f"
+        cmd = f"cvlc '{str(self.videoinfo.path)}' -f"
 
         if self.videoinfo.subtitle_path is not None:
             cmd += f" --sub-file '{str(self.videoinfo.subtitle_path)}'"

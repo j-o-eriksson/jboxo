@@ -15,9 +15,9 @@ def create_app():
 
     app = Flask(__name__)
 
-    @app.get("/videos")
-    def list_videos():
-        return json.dumps(wrapper.get_videos(), indent=2)
+    @app.get("/movies")
+    def list_movies():
+        return provider.get_movie_data()
 
     @app.get("/subtitles")
     def list_subtitles():

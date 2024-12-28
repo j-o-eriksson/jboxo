@@ -25,7 +25,7 @@ export const Play: React.FC<{
 };
 
 const SubPicker: React.FC<{ setInfo: utils.InfoCallback }> = ({ setInfo }) => {
-  const [subtitles, setSubtitles] = useState<utils.Video[]>([]);
+  const [subtitles, setSubtitles] = useState<utils.Subtitle[]>([]);
 
   useEffect(() => {
     utils.fetchData("/api/subtitles", setSubtitles);
