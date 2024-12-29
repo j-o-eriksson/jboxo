@@ -3,6 +3,7 @@ import subprocess
 from base64 import b64encode
 from dataclasses import dataclass
 from pathlib import Path
+from random import choice
 
 from jboxo.utils import clean_string
 
@@ -13,7 +14,7 @@ class VideoInfo:
     name: str = ""
     path: Path = Path()
     duration: int = 0
-    thumbnail: bytes = b""
+    thumbnail: str = ""
     subtitle_name: str | None = None
     subtitle_path: Path | None = None
 
@@ -26,7 +27,7 @@ class VideoJSONEncoder(json.JSONEncoder):
                 "name": o.name,
                 "path": str(o.path),
                 "duration": o.duration,
-                "thumbnail": o.thumbnail.decode(),
+                "thumbnail": o.thumbnail,
             }
         return super().default(o)
 
@@ -34,7 +35,8 @@ class VideoJSONEncoder(json.JSONEncoder):
 class VideoProvider:
     def __init__(self):
         self.meta_path = Path("~/.bbo/meta.json").expanduser()
-        self.root_path = Path("~/Downloads/bbo/movies").expanduser()
+        self.movies_path = Path("~/Downloads/bbo/movies").expanduser()
+        self.series_path = Path("~/Downloads/bbo/series").expanduser()
         self.data_path = Path(__file__).parents[1] / "data"
         self.database: dict[int, VideoInfo] = {}
         self.refresh()
@@ -84,11 +86,12 @@ class VideoProvider:
         self.meta_path.write_text(json.dumps(self.videodata, indent=2))
 
     def _get_paths(self, extentions):
-        return [f for f in self.root_path.rglob("*") if f.suffix in extentions]
+        return [f for f in self.movies_path.rglob("*") if f.suffix in extentions]
 
-    def _get_thumbnail(self, video_id: Path) -> bytes:
-        p = next((self.data_path / "thumbnails").iterdir())
-        return b64encode(p.read_bytes())
+    def _get_thumbnail(self, video_id: Path) -> str:
+        ps = list((self.data_path / "thumbnails").iterdir())
+        p = choice(ps)
+        return b64encode(p.read_bytes()).decode()
 
 
 def _get_duration(path: Path) -> int:
