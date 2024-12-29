@@ -51,6 +51,12 @@ class VideoProvider:
         print(out)
         return out
 
+    def get_series_data(self) -> str:
+        vs = list(self.database.values())
+        out = json.dumps(vs[-2:], cls=VideoJSONEncoder, indent=2)
+        print(out)
+        return out
+
     def refresh(self):
         self.video_paths = self._get_paths({".mp4"})
         self.sub_paths = self._get_paths({".srt"})

@@ -19,6 +19,10 @@ def create_app():
     def list_movies():
         return provider.get_movie_data()
 
+    @app.get("/series")
+    def list_series():
+        return provider.get_series_data()
+
     @app.get("/subtitles")
     def list_subtitles():
         return json.dumps(wrapper.get_subtitles(), indent=2)

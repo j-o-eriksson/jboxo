@@ -48,7 +48,8 @@ body {
 }
 
 nav {
-  height: 250px;
+  height: 350px;
+  width: 100%;
   overflow: hidden;
   overflow-y: scroll;
   margin-bottom: 10px;

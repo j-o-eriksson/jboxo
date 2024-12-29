@@ -10,8 +10,8 @@ const Main = () => {
   const tabs = [
     {
       id: "1",
-      title: "videos",
-      content: <Browse info={info} setInfo={setInfo} setCurrentTab={setCurrentTab} />,
+      title: "browse",
+      content: <Browse setInfo={setInfo} setCurrentTab={setCurrentTab} />,
     },
     {
       id: "2",
