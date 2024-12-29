@@ -1,7 +1,9 @@
 import json
+from base64 import b64encode
 
 from flask import Flask, render_template, send_from_directory
 
+from jboxo.thumbnail import download_image, get_image_link
 from jboxo.utils import wake_screen
 from jboxo.videoprovider import VideoProvider
 from jboxo.wrapper import VLCWrapper
@@ -26,6 +28,12 @@ def create_app():
     @app.get("/subtitles")
     def list_subtitles():
         return json.dumps(wrapper.get_subtitles(), indent=2)
+
+    @app.get("/thumbnail/<query>")
+    def get_thumbnail(query):
+        link = get_image_link(query)
+        img, suffix = download_image(link)
+        return f'<img src="data:image/{suffix};base64,{b64encode(img).decode()}" />'
 
     @app.get("/selected")
     def get_selected_info():

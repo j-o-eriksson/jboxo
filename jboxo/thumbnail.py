@@ -19,13 +19,18 @@ def download_image(url) -> tuple[bytes, str]:
 
 
 def get_image_link(query: str):
-    url = f"https://en.wikipedia.org/w/api.php?action=opensearch&search={query}&limit=5&namespace=0&format=json"
+    url = f"https://en.wikipedia.org/w/api.php?action=opensearch&search={query}&limit=10&namespace=0&format=json"
     response = requests.get(url)
     d = json.loads(response.text)
     idx = next(
-        (i for i, x in enumerate(d[1]) if any(s in x.lower() for s in ["film", "tv"])),
+        (
+            i
+            for i, x in enumerate(d[1])
+            if any(s in x for s in ["film)", "TV series)"])  # use regex?
+        ),
         0,
     )
+    print(d[1][idx])
     return d[3][idx]
 
 
