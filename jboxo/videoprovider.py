@@ -36,24 +36,15 @@ class VideoJSONEncoder(json.JSONEncoder):
 
 class VideoProvider:
     def __init__(self):
-        self.meta_path = Path("~/.bbo/meta.json").expanduser()
         self.movies_path = Path("~/Downloads/bbo/movies").expanduser()
         self.series_path = Path("~/Downloads/bbo/series").expanduser()
         self.data_path = Path(__file__).parents[1] / "data"
         self.database: dict[int, VideoInfo] = {}
+        self.subtitles: dict[int, tuple[str, Path]] = {}
         self.refresh()
 
-    def __del__(self):
-        self._dump()
-
-    def get_meta(self, video_id: str) -> int:
-        return self.videodata[video_id]
-
     def get_movie_data(self) -> str:
-        vs = list(self.database.values())
-        out = json.dumps(vs, cls=VideoJSONEncoder, indent=2)
-        print(out)
-        return out
+        return json.dumps(list(self.database.values()), cls=VideoJSONEncoder, indent=2)
 
     def get_series_data(self) -> str:
         vs = list(self.database.values())
@@ -64,28 +55,12 @@ class VideoProvider:
     def refresh(self):
         self.video_paths = self._get_paths({".mp4"})
         self.sub_paths = self._get_paths({".srt"})
-        self.videodata = self._init_meta()
         self.database = {
             i: VideoInfo(
                 i, clean_string(p.stem), p, _get_duration(p), self._get_thumbnail(p)
             )
             for i, p in enumerate(self.video_paths)
         }
-
-    def _init_meta(self):
-        if not self.meta_path.exists():
-            self.meta_path.write_text("{}")
-
-        metadata = json.loads(self.meta_path.read_text())
-        for video_path in self.video_paths:
-            video_id = clean_string(str(video_path.stem))
-            if video_id not in metadata:
-                print(f"retrieving duration for {video_id}")
-                metadata[video_id] = _get_duration(video_path)
-        return metadata
-
-    def _dump(self):
-        self.meta_path.write_text(json.dumps(self.videodata, indent=2))
 
     def _get_paths(self, extentions):
         return [f for f in self.movies_path.rglob("*") if f.suffix in extentions]
