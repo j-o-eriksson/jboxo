@@ -31,7 +31,7 @@ const SubPicker: React.FC<{ setInfo: utils.InfoCallback }> = ({ setInfo }) => {
   }, []);
 
   const subList = subtitles.map((sub, i) => (
-    <option value={sub.path} key={i}>
+    <option value={sub.id} key={i}>
       {sub.name}
     </option>
   ));
@@ -42,7 +42,7 @@ const SubPicker: React.FC<{ setInfo: utils.InfoCallback }> = ({ setInfo }) => {
       <select
         className="play-select upper-bold col-b"
         onChange={async (e) => {
-          await utils.addVideoData("subtitles", e.target.value);
+          await utils.addVideoData("subtitles", e.target.value);  // why is value string
           await utils.fetchInfo(setInfo);
         }}
       >

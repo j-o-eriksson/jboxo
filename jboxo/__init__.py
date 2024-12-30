@@ -27,7 +27,7 @@ def create_app():
 
     @app.get("/subtitles")
     def list_subtitles():
-        return json.dumps(wrapper.get_subtitles(), indent=2)
+        return provider.get_subtitle_data()
 
     @app.get("/thumbnail/<query>")
     def get_thumbnail(query):

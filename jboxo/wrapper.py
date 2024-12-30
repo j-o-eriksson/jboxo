@@ -6,7 +6,6 @@ from pathlib import Path
 
 from flask import request
 
-from jboxo.utils import clean_string
 from jboxo.videoprovider import VideoInfo, VideoJSONEncoder, VideoProvider
 
 
@@ -30,12 +29,6 @@ class VLCWrapper:
     def execute(self, cmd: str) -> None:
         self.callbacks[cmd]()
 
-    def get_subtitles(self):
-        return [
-            {"name": clean_string(p.stem), "path": str(p)}
-            for p in self.video_provider.sub_paths
-        ]
-
     def get_selected_info(self):
         return json.dumps(self.videoinfo, cls=VideoJSONEncoder)
 
@@ -47,9 +40,10 @@ class VLCWrapper:
         if datatype == "video":
             self.videoinfo = self.video_provider.database.get(asset_id, VideoInfo(-1))
         elif datatype == "subtitles":
-            pass
-            # self.videoinfo.subtitle_name = clean_string(path.stem)
-            # self.videoinfo.subtitle_path = path
+            _, sname, spath = self.video_provider.subtitles[int(asset_id)]
+            print(sname, spath)
+            self.videoinfo.subtitle_name = sname
+            self.videoinfo.subtitle_path = spath
         else:
             raise ValueError("Invalid data type.")
 

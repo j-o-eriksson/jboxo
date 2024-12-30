@@ -26,7 +26,6 @@ class VideoJSONEncoder(json.JSONEncoder):
             return {
                 "id": o.id,
                 "name": o.name,
-                "path": str(o.path),
                 "duration": o.duration,
                 "video_duration_str": str(timedelta(seconds=o.duration)),
                 "thumbnail": o.thumbnail,
@@ -40,7 +39,7 @@ class VideoProvider:
         self.series_path = Path("~/Downloads/bbo/series").expanduser()
         self.data_path = Path(__file__).parents[1] / "data"
         self.database: dict[int, VideoInfo] = {}
-        self.subtitles: dict[int, tuple[str, Path]] = {}
+        self.subtitles: dict[int, tuple[int, str, Path]] = {}
         self.refresh()
 
     def get_movie_data(self) -> str:
@@ -48,18 +47,26 @@ class VideoProvider:
 
     def get_series_data(self) -> str:
         vs = list(self.database.values())
-        out = json.dumps(vs[-2:], cls=VideoJSONEncoder, indent=2)
-        print(out)
-        return out
+        return json.dumps(vs[-2:], cls=VideoJSONEncoder, indent=2)
+
+    def get_subtitle_data(self) -> str:
+        return json.dumps(
+            [{"id": i, "name": name} for i, name, _ in self.subtitles.values()],
+            indent=2,
+        )
 
     def refresh(self):
-        self.video_paths = self._get_paths({".mp4"})
-        self.sub_paths = self._get_paths({".srt"})
+        video_paths = self._get_paths({".mp4"})
         self.database = {
             i: VideoInfo(
                 i, clean_string(p.stem), p, _get_duration(p), self._get_thumbnail(p)
             )
-            for i, p in enumerate(self.video_paths)
+            for i, p in enumerate(video_paths)
+        }
+
+        sub_paths = self._get_paths({".srt"})
+        self.subtitles = {
+            i: (i, clean_string(p.stem), p) for i, p in enumerate(sub_paths)
         }
 
     def _get_paths(self, extentions):

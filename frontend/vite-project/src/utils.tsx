@@ -12,8 +12,8 @@ export type Video = {
 };
 
 export type Subtitle = {
+  id: number;
   name: string;
-  path: string;
 }
 
 export type VideoInfo = {
