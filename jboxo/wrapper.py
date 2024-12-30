@@ -1,4 +1,5 @@
 import ast
+import json
 import shlex
 import subprocess
 from datetime import timedelta
@@ -7,7 +8,7 @@ from pathlib import Path
 from flask import request
 
 from jboxo.utils import clean_string
-from jboxo.videoprovider import VideoInfo, VideoProvider
+from jboxo.videoprovider import VideoInfo, VideoJSONEncoder, VideoProvider
 
 
 class VLCWrapper:
@@ -37,28 +38,19 @@ class VLCWrapper:
         ]
 
     def get_selected_info(self):
-        return {
-            "data": {
-                "name": self.videoinfo.name,
-                "subtitle_name": self.videoinfo.subtitle_name,
-                "video_duration": self.videoinfo.duration,
-                "video_duration_str": str(timedelta(seconds=self.videoinfo.duration)),
-            }
-        }
+        return json.dumps(self.videoinfo, cls=VideoJSONEncoder)
 
     def _add(self) -> None:
         data = ast.literal_eval(request.data.decode("utf-8"))
-        path = Path(data["path"])
+        asset_id = data["id"]
         datatype = data["type"]
 
         if datatype == "video":
-            name = clean_string(path.stem)
-            self.videoinfo.name = name
-            self.videoinfo.path = path
-            self.videoinfo.duration = self.video_provider.get_meta(name)
+            self.videoinfo = self.video_provider.database.get(asset_id, VideoInfo(-1))
         elif datatype == "subtitles":
-            self.videoinfo.subtitle_name = clean_string(path.stem)
-            self.videoinfo.subtitle_path = path
+            pass
+            # self.videoinfo.subtitle_name = clean_string(path.stem)
+            # self.videoinfo.subtitle_path = path
         else:
             raise ValueError("Invalid data type.")
 

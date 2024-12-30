@@ -20,6 +20,7 @@ export type VideoInfo = {
   name: string;
   subtitles: string;
   duration: string;
+  thumbnail: string;
 };
 
 export function getDefaultInfo(): VideoInfo {
@@ -27,13 +28,14 @@ export function getDefaultInfo(): VideoInfo {
     name: "-",
     subtitles: "-",
     duration: "-",
+    thumbnail: "-",
   };
 }
 
-export const addVideoData = async (dataType: string, path: string) => {
+export const addVideoData = async (dataType: string, asset_id: number) => {
   const response = await fetch("/api/control/add", {
     method: "POST",
-    body: JSON.stringify({ type: dataType, path: path }),
+    body: JSON.stringify({ type: dataType, id: asset_id }),
   });
   const text = await response.text();
   console.log(`Add returned: ${text}`);
@@ -47,11 +49,13 @@ export const fetchData = async (endpoint: string, callback: any) => {
 
 export const fetchInfo = async (callback: any) => {
   const response = await fetch("/api/selected");
-  const { data } = await response.json();
+  const info = await response.json();
+  console.log(info)
   callback({
-    name: data.name,
-    subtitles: data.subtitle_name,
-    duration: data.video_duration_str,
+    name: info.name,
+    subtitles: "",
+    duration: info.video_duration_str,
+    thumbnail: info.thumbnail,
   });
 };
 

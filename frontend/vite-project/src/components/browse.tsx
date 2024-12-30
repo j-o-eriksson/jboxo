@@ -56,7 +56,7 @@ const MyListItem: React.FC<{
     <li
       key={video.name}
       onClick={async () => {
-        await utils.addVideoData("video", video.path);
+        await utils.addVideoData("video", video.id);
         await utils.fetchInfo(setInfo);
         setCurrentTab("2")
       }}

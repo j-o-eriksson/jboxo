@@ -79,8 +79,8 @@ nav {
 .stuff li img {
   float: left;
   margin: 0 15px 0 0;
-  width: 75px;
-  height: 100px;
+  width: 100px;
+  height: 150px;
 }
  
 .stuff li p {
@@ -115,7 +115,7 @@ nav {
 
 .myimg {
   width: 150px;
-  height: 150px;
+  height: 225px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 20px;

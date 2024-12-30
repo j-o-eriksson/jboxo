@@ -2,6 +2,7 @@ import json
 import subprocess
 from base64 import b64encode
 from dataclasses import dataclass
+from datetime import timedelta
 from pathlib import Path
 from random import choice
 
@@ -27,6 +28,7 @@ class VideoJSONEncoder(json.JSONEncoder):
                 "name": o.name,
                 "path": str(o.path),
                 "duration": o.duration,
+                "video_duration_str": str(timedelta(seconds=o.duration)),
                 "thumbnail": o.thumbnail,
             }
         return super().default(o)

@@ -37,7 +37,7 @@ def create_app():
 
     @app.get("/selected")
     def get_selected_info():
-        return json.dumps(wrapper.get_selected_info(), indent=2)
+        return wrapper.get_selected_info()
 
     @app.post("/control/<cmd>")
     def execute_command(cmd):

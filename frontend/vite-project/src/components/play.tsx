@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Info } from "./info";
 import * as utils from "../utils";
-import bacon from "../assets/bacon.jpg";
 
 export const Play: React.FC<{
   info: utils.VideoInfo;
@@ -9,7 +8,7 @@ export const Play: React.FC<{
 }> = ({ info, setInfo }) => {
   return (
     <div className="play-wrapper">
-      <img className="myimg" src={bacon} alt="bacon" />
+      <img className="myimg" src={`data:image/jpeg;base64,${info.thumbnail}`} />
       <SubPicker setInfo={setInfo} />
       <Info info={info} />
       <input
