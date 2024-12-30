@@ -16,7 +16,7 @@ class VideoInfo:
     path: Path = Path()
     duration: int = 0
     thumbnail: str = ""
-    subtitle_name: str | None = None
+    subtitle_name: str = ""
     subtitle_path: Path | None = None
 
 
@@ -29,6 +29,7 @@ class VideoJSONEncoder(json.JSONEncoder):
                 "duration": o.duration,
                 "video_duration_str": str(timedelta(seconds=o.duration)),
                 "thumbnail": o.thumbnail,
+                "subtitle_name": o.subtitle_name,
             }
         return super().default(o)
 

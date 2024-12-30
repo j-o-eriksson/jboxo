@@ -42,7 +42,7 @@ const SubPicker: React.FC<{ setInfo: utils.InfoCallback }> = ({ setInfo }) => {
       <select
         className="play-select upper-bold col-b"
         onChange={async (e) => {
-          await utils.addVideoData("subtitles", e.target.value);  // why is value string
+          await utils.addVideoData("subtitles", parseInt(e.target.value));
           await utils.fetchInfo(setInfo);
         }}
       >

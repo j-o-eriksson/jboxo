@@ -53,7 +53,7 @@ export const fetchInfo = async (callback: any) => {
   console.log(info)
   callback({
     name: info.name,
-    subtitles: "",
+    subtitles: info.subtitle_name,
     duration: info.video_duration_str,
     thumbnail: info.thumbnail,
   });

@@ -41,7 +41,6 @@ class VLCWrapper:
             self.videoinfo = self.video_provider.database.get(asset_id, VideoInfo(-1))
         elif datatype == "subtitles":
             _, sname, spath = self.video_provider.subtitles[int(asset_id)]
-            print(sname, spath)
             self.videoinfo.subtitle_name = sname
             self.videoinfo.subtitle_path = spath
         else:
