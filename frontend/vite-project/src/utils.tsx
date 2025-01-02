@@ -19,7 +19,7 @@ export type Subtitle = {
 export type VideoInfo = {
   name: string;
   subtitles: string;
-  duration: string;
+  duration: number;
   thumbnail: string;
 };
 
@@ -27,19 +27,10 @@ export function getDefaultInfo(): VideoInfo {
   return {
     name: "-",
     subtitles: "-",
-    duration: "-",
+    duration: 0,
     thumbnail: "-",
   };
 }
-
-export const addVideoData = async (dataType: string, asset_id: number) => {
-  const response = await fetch("/api/control/add", {
-    method: "POST",
-    body: JSON.stringify({ type: dataType, id: asset_id }),
-  });
-  const text = await response.text();
-  console.log(`Add returned: ${text}`);
-};
 
 export const fetchData = async (endpoint: string, callback: any) => {
   const response = await fetch(endpoint);
@@ -54,21 +45,26 @@ export const fetchInfo = async (callback: any) => {
   callback({
     name: info.name,
     subtitles: info.subtitle_name,
-    duration: info.video_duration_str,
+    duration: info.duration.toString(),
     thumbnail: info.thumbnail,
   });
 };
 
-const postBase = async (endpoint: string) => {
+const postBase = async (endpoint: string, body: any = {}) => {
   const response = await fetch(endpoint, {
     method: "POST",
+    body: JSON.stringify(body),
   });
   const text = await response.text();
   console.log(`Post request to ${endpoint} returned: ${text}`);
 };
 
-export const playVideo = async () => {
-  return postBase("/api/control/play");
+export const addVideoData = async (dataType: string, asset_id: number) => {
+  return postBase("/api/control/add", { type: dataType, id: asset_id })
+};
+
+export const playVideo = async (seek_time: number = 0) => {
+  return postBase("/api/control/play", { seek_time: seek_time });
 };
 
 export const pauseVideo = async () => {

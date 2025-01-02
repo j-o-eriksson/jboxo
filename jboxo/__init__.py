@@ -1,9 +1,8 @@
 from base64 import b64encode
 
-from flask import Flask, send_from_directory
+from flask import Flask, request, send_from_directory
 
 from jboxo.thumbnail import get_image
-from jboxo.utils import wake_screen
 from jboxo.videoprovider import VideoProvider
 from jboxo.wrapper import VLCWrapper
 
@@ -41,12 +40,8 @@ def create_app():
 
     @app.post("/api/control/<cmd>")
     def execute_command(cmd):
-        wrapper.execute(cmd)
-        return "Success", 200
-
-    @app.post("/api/wake")
-    def wake():
-        wake_screen()
+        data = request.data.decode()
+        wrapper.execute(cmd, data)
         return "Success", 200
 
     @app.route("/")

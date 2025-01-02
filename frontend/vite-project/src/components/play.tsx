@@ -6,19 +6,13 @@ export const Play: React.FC<{
   info: utils.VideoInfo;
   setInfo: utils.InfoCallback;
 }> = ({ info, setInfo }) => {
+
   return (
     <div className="play-wrapper">
       <img className="myimg" src={`data:image/jpeg;base64,${info.thumbnail}`} />
       <SubPicker setInfo={setInfo} />
       <Info info={info} />
-      <input
-        className="seek"
-        type="range"
-        onChange={(e) => {
-          console.log(e.target.value);
-        }}
-      />
-      <Control />
+      <Control info={info} />
     </div>
   );
 };
@@ -52,19 +46,37 @@ const SubPicker: React.FC<{ setInfo: utils.InfoCallback }> = ({ setInfo }) => {
   );
 };
 
-const Control = () => {
+const Control: React.FC<{ info: utils.VideoInfo }> = ({ info }) => {
   const styles = "play-button upper-bold col-a";
+  const [seekTime, setSeekTime] = useState(0);
+
+  const durationString = (t: number) => {
+    return new Date(t * 1000).toISOString().slice(11, 19);
+  }
+
   return (
-    <div className="wrapper2">
-      <button className={styles} id="one" onClick={utils.playVideo}>
-        play
-      </button>
-      <button className={styles} id="two" onClick={utils.pauseVideo}>
-        pause
-      </button>
-      <button className={styles} id="three" onClick={utils.stopVideo}>
-        stop
-      </button>
-    </div>
+    <>
+      <div className="progress">
+        <p className="upper-bold">{durationString(seekTime / 100 * info.duration)}</p>
+        <input
+          type="range"
+          onChange={(e) => {
+            setSeekTime(parseInt(e.target.value))
+          }}
+        />
+        <p className="upper-bold">{durationString(info.duration)}</p>
+      </div>
+      <div className="wrapper2">
+        <button className={styles} id="one" onClick={async () => { utils.playVideo(seekTime) }}>
+          play
+        </button>
+        <button className={styles} id="two" onClick={utils.pauseVideo}>
+          pause
+        </button>
+        <button className={styles} id="three" onClick={utils.stopVideo}>
+          stop
+        </button>
+      </div>
+    </>
   );
 };

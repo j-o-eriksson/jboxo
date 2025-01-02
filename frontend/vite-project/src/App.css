@@ -57,7 +57,7 @@ nav {
 
 .stuff ul {
   width: 100%;
-  display: inline-block;
+  /* display: inline-block; */
   margin: 0;
   padding: 0;
 }
@@ -85,6 +85,21 @@ nav {
  
 .stuff li p {
   font: 200 10px/1.5 Georgia, Times New Roman, serif;
+}
+
+.progress {
+  /* width: 20px; */
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.progress p {
+  font-size: 0.8em;
+}
+
+.progress input {
+  width: 100px;
+  margin: 0px 10px 0px 10px;
 }
 
 .info {
@@ -151,9 +166,4 @@ nav {
 .wrapper2 {
   display: flex;
   justify-content: space-between;
-}
-
-.seek {
-  width: 200px;
-  margin-bottom: 20px;
 }

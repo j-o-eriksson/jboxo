@@ -10,17 +10,17 @@ from PIL import Image
 HEADERS = {
     "User-Agent": "CoolBot/0.0 (https://example.org/coolbot/; coolbot@example.org)"
 }
-PLACEHOLDER = Path("data/placeholder.jpg").read_bytes()
+PLACEHOLDER = Path("data/placeholder.png").read_bytes()
 
 
 def get_image(query: str):
     link = get_wiki_link(query)
     if link is None:
-        return PLACEHOLDER, "jpg"
+        return PLACEHOLDER, "png"
 
     out = download_image(link)
     if out is None:
-        return PLACEHOLDER, "jpg"
+        return PLACEHOLDER, "png"
     return out
 
 
@@ -82,6 +82,7 @@ if __name__ == "__main__":
         "oldboy",
         "alien romulus",
         "the lion king",
+        "severance",
     ]
 
     path = Path("trash")
