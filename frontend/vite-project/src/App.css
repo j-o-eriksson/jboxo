@@ -94,12 +94,12 @@ nav {
 }
 
 .progress p {
-  font-size: 0.8em;
+  font-size: 0.7em;
 }
 
 .progress input {
-  width: 100px;
-  margin: 0px 10px 0px 10px;
+  width: 190px;
+  margin: 0px 10px 0px 0px;
 }
 
 .info {

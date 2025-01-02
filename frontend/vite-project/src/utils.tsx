@@ -50,6 +50,12 @@ export const fetchInfo = async (callback: any) => {
   });
 };
 
+export const fetchElapsed = async (callback: any) => {
+  const response = await fetch("/api/elapsed");
+  const { elapsed } = await response.json();
+  callback(elapsed);
+};
+
 const postBase = async (endpoint: string, body: any = {}) => {
   const response = await fetch(endpoint, {
     method: "POST",

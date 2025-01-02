@@ -38,6 +38,10 @@ def create_app():
     def get_selected_info():
         return wrapper.get_selected_info()
 
+    @app.get("/api/elapsed")
+    def get_elapsed():
+        return wrapper.get_elapsed()
+
     @app.post("/api/control/<cmd>")
     def execute_command(cmd):
         data = request.data.decode()

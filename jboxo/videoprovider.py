@@ -14,7 +14,7 @@ class VideoInfo:
     id: int
     name: str = ""
     path: Path = Path()
-    duration: int = 0
+    duration: int = 1
     thumbnail: str = ""
     subtitle_name: str = ""
     subtitle_path: Path | None = None

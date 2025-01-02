@@ -48,26 +48,38 @@ const SubPicker: React.FC<{ setInfo: utils.InfoCallback }> = ({ setInfo }) => {
 
 const Control: React.FC<{ info: utils.VideoInfo }> = ({ info }) => {
   const styles = "play-button upper-bold col-a";
-  const [seekTime, setSeekTime] = useState(0);
+  const [elapsed, setElapsed] = useState(0);
 
+  const fullTime = new Date(info.duration * 1000).toISOString().slice(12, 19);
   const durationString = (t: number) => {
-    return new Date(t * 1000).toISOString().slice(11, 19);
+    const currentTime = new Date(t * 1000).toISOString().slice(12, 19);
+    return `${currentTime} / ${fullTime}`
   }
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      utils.fetchElapsed(setElapsed)
+    }, 5000)
+
+    return () => {
+      clearInterval(id)
+    }
+  }, [elapsed]);
 
   return (
     <>
       <div className="progress">
-        <p className="upper-bold">{durationString(seekTime / 100 * info.duration)}</p>
         <input
           type="range"
+          value={elapsed}
           onChange={(e) => {
-            setSeekTime(parseInt(e.target.value))
+            setElapsed(parseInt(e.target.value))
           }}
         />
-        <p className="upper-bold">{durationString(info.duration)}</p>
+        <p className="upper-bold">{durationString(elapsed * info.duration / 100)}</p>
       </div>
       <div className="wrapper2">
-        <button className={styles} id="one" onClick={async () => { utils.playVideo(seekTime) }}>
+        <button className={styles} id="one" onClick={async () => { utils.playVideo(elapsed) }}>
           play
         </button>
         <button className={styles} id="two" onClick={utils.pauseVideo}>
