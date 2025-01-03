@@ -14,7 +14,7 @@ export type Video = {
 export type Subtitle = {
   id: number;
   name: string;
-}
+};
 
 export type VideoInfo = {
   name: string;
@@ -41,7 +41,7 @@ export const fetchData = async (endpoint: string, callback: any) => {
 export const fetchInfo = async (callback: any) => {
   const response = await fetch("/api/selected");
   const info = await response.json();
-  console.log(info)
+  console.log(info);
   callback({
     name: info.name,
     subtitles: info.subtitle_name,
@@ -66,7 +66,7 @@ const postBase = async (endpoint: string, body: any = {}) => {
 };
 
 export const addVideoData = async (dataType: string, asset_id: number) => {
-  return postBase("/api/control/add", { type: dataType, id: asset_id })
+  return postBase("/api/control/add", { type: dataType, id: asset_id });
 };
 
 export const playVideo = async (seek_time: number = 0) => {

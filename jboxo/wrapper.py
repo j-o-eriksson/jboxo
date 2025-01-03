@@ -23,7 +23,7 @@ class VLCWrapper:
         self.vlcprocess: subprocess.Popen | None = None
 
         self.elapsed = 0
-        self.t0 = time.time()
+        self.last_timestamp = time.time()
 
     def __del__(self):
         if self.vlcprocess is not None:
@@ -42,7 +42,7 @@ class VLCWrapper:
                 self.elapsed = self.videoinfo.duration
             else:
                 self._step_time()
-        return json.dumps({"elapsed": self.elapsed / self.videoinfo.duration * 100})
+        return json.dumps({"elapsed": self.elapsed})
 
     def _add(self, data: dict) -> None:
         print("Add called with data: ", data)
@@ -58,6 +58,9 @@ class VLCWrapper:
         else:
             raise ValueError("Invalid data type.")
 
+        self._stop({})
+        self.elapsed = 0
+
     def _play(self, data: dict) -> None:
         print("Play called with data: ", data)
         if self.vlcprocess is not None:
@@ -66,7 +69,7 @@ class VLCWrapper:
         if self.videoinfo.path is None:
             raise ValueError("Video path not set.")
 
-        seek_time = int(self.videoinfo.duration * data["seek_time"] / 100)
+        seek_time = data["seek_time"]
         cmd = f"cvlc '{str(self.videoinfo.path)}' -f --start-time={seek_time}"
 
         if self.videoinfo.subtitle_path is not None:
@@ -76,7 +79,7 @@ class VLCWrapper:
         self.vlcprocess = subprocess.Popen(shlex.split(cmd))
 
         self.elapsed = seek_time
-        self.t0 = time.time()
+        self.last_timestamp = time.time()
 
     def _stop(self, data: dict) -> None:
         print("Stop called with data: ", data)
@@ -90,6 +93,6 @@ class VLCWrapper:
         wake_screen()
 
     def _step_time(self):
-        t1 = time.time()
-        self.elapsed += t1 - self.t0
-        self.t0 = t1
+        timestamp = time.time()
+        self.elapsed += timestamp - self.last_timestamp
+        self.last_timestamp = timestamp

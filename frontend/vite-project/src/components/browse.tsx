@@ -18,8 +18,8 @@ const MyList: React.FC<{
 }> = ({ setInfo, setCurrentTab }) => {
   const [videos, setVideo] = useState<utils.Video[]>([]);
   useEffect(() => {
-    utils.fetchData("/api/movies", setVideo)
-  }, [])
+    utils.fetchData("/api/movies", setVideo);
+  }, []);
 
   return (
     <>
@@ -29,17 +29,18 @@ const MyList: React.FC<{
           utils.fetchData(`/api/${e.target.value}`, setVideo);
         }}
       >
-        <option value={"movies"}>
-          {"movies"}
-        </option>
-        <option value={"series"}>
-          {"series"}
-        </option>
+        <option value={"movies"}>{"movies"}</option>
+        <option value={"series"}>{"series"}</option>
       </select>
       <nav>
         <ul>
           {videos.map((video) => (
-            <MyListItem key={video.id} video={video} setInfo={setInfo} setCurrentTab={setCurrentTab} />
+            <MyListItem
+              key={video.id}
+              video={video}
+              setInfo={setInfo}
+              setCurrentTab={setCurrentTab}
+            />
           ))}
         </ul>
       </nav>
@@ -50,7 +51,7 @@ const MyList: React.FC<{
 const MyListItem: React.FC<{
   video: utils.Video;
   setInfo: utils.InfoCallback;
-  setCurrentTab: utils.TabCallback
+  setCurrentTab: utils.TabCallback;
 }> = ({ video, setInfo, setCurrentTab }) => {
   return (
     <li
@@ -58,12 +59,15 @@ const MyListItem: React.FC<{
       onClick={async () => {
         await utils.addVideoData("video", video.id);
         await utils.fetchInfo(setInfo);
-        setCurrentTab("2")
+        setCurrentTab("2");
       }}
     >
       <img src={`data:image/jpeg;base64,${video.thumbnail}`} />
       <h3>{video.name}</h3>
-      <p>Lorem {video.duration} ipsum dolor sit amet, consectetur adipiscing elit...</p>
+      <p>
+        Lorem {video.duration} ipsum dolor sit amet, consectetur adipiscing
+        elit...
+      </p>
     </li>
   );
 };

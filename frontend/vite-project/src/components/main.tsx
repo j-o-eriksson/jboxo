@@ -29,7 +29,8 @@ const Main = () => {
     <div className="container">
       <div className="tabs">
         {tabs.map((tab, i) => (
-          <button className="col-b upper-bold"
+          <button
+            className="col-b upper-bold"
             key={i}
             id={tab.id}
             disabled={currentTab === `${tab.id}`}
@@ -43,9 +44,7 @@ const Main = () => {
       </div>
       <div>
         {tabs.map((tab) => (
-          <div key={tab.id}>
-            {currentTab === tab.id && tab.content}
-          </div>
+          <div key={tab.id}>{currentTab === tab.id && tab.content}</div>
         ))}
       </div>
     </div>

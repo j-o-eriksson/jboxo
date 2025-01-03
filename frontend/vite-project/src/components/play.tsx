@@ -6,7 +6,6 @@ export const Play: React.FC<{
   info: utils.VideoInfo;
   setInfo: utils.InfoCallback;
 }> = ({ info, setInfo }) => {
-
   return (
     <div className="play-wrapper">
       <img className="myimg" src={`data:image/jpeg;base64,${info.thumbnail}`} />
@@ -47,39 +46,60 @@ const SubPicker: React.FC<{ setInfo: utils.InfoCallback }> = ({ setInfo }) => {
 };
 
 const Control: React.FC<{ info: utils.VideoInfo }> = ({ info }) => {
-  const styles = "play-button upper-bold col-a";
   const [elapsed, setElapsed] = useState(0);
+  const [isSliding, setSliding] = useState(false);
 
   const fullTime = new Date(info.duration * 1000).toISOString().slice(12, 19);
   const durationString = (t: number) => {
     const currentTime = new Date(t * 1000).toISOString().slice(12, 19);
-    return `${currentTime} / ${fullTime}`
-  }
+    return `${currentTime} / ${fullTime}`;
+  };
 
   useEffect(() => {
     const id = setInterval(() => {
-      utils.fetchElapsed(setElapsed)
-    }, 5000)
+      console.log("is sliding: ", isSliding);
+      if (!isSliding) {
+        utils.fetchElapsed(setElapsed);
+      }
+    }, 3000);
 
     return () => {
-      clearInterval(id)
-    }
-  }, [elapsed]);
+      clearInterval(id);
+    };
+  }, [elapsed, isSliding]);
 
+  const inputStart = () => {
+    setSliding(true);
+  };
+  const inputStop = () => {
+    utils.playVideo(elapsed);
+    setSliding(false);
+  };
+
+  const styles = "play-button upper-bold col-a";
   return (
     <>
       <div className="progress">
         <input
           type="range"
           value={elapsed}
+          max={info.duration}
           onChange={(e) => {
-            setElapsed(parseInt(e.target.value))
+            setElapsed(parseInt(e.target.value));
           }}
+          onMouseDown={inputStart}
+          onMouseUp={inputStop}
         />
-        <p className="upper-bold">{durationString(elapsed * info.duration / 100)}</p>
+        <p className="upper-bold">{durationString(elapsed)}</p>
       </div>
       <div className="wrapper2">
-        <button className={styles} id="one" onClick={async () => { utils.playVideo(elapsed) }}>
+        <button
+          className={styles}
+          id="one"
+          onClick={async () => {
+            utils.playVideo(elapsed);
+          }}
+        >
           play
         </button>
         <button className={styles} id="two" onClick={utils.pauseVideo}>
