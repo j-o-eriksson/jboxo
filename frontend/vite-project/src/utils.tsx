@@ -74,7 +74,7 @@ export const playVideo = async (seek_time: number = 0) => {
 };
 
 export const pauseVideo = async () => {
-  return postBase("/api/control/pause");
+  return postBase("/api/control/refresh");
 };
 
 export const stopVideo = async () => {

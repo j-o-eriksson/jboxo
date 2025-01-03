@@ -2,10 +2,30 @@ import json
 import shlex
 import subprocess
 import time
+from dataclasses import dataclass
 from pathlib import Path
 
 from jboxo.utils import wake_screen
 from jboxo.videoprovider import VideoInfo, VideoJSONEncoder, VideoProvider
+
+
+@dataclass
+class PlayerState:
+    is_playing = False
+    start_elapsed = 0
+    start_timestamp = 0
+
+    def start(self, seektime: int):
+        self.is_playing = True
+        self.start_elapsed = seektime
+        self.start_timestamp = time.time()
+
+    def stop(self):
+        self.is_playing = False
+        # TODO: handle elapsed
+
+    def elapsed(self):
+        return self.start_elapsed + time.time() - self.start_timestamp
 
 
 class VLCWrapper:
@@ -17,9 +37,10 @@ class VLCWrapper:
             "play": self._play,
             "stop": self._stop,
             "wake": self._wake,
+            "refresh": self._refresh,
         }
         self.videoinfo = VideoInfo(-1)
-        self.video_provider = video_provider
+        self.videoprovider = video_provider
         self.vlcprocess: subprocess.Popen | None = None
 
         self.elapsed = 0
@@ -50,9 +71,9 @@ class VLCWrapper:
         datatype = data["type"]
 
         if datatype == "video":
-            self.videoinfo = self.video_provider.database[asset_id]
+            self.videoinfo = self.videoprovider.database[asset_id]
         elif datatype == "subtitles":
-            _, sname, spath = self.video_provider.subtitles[asset_id]
+            _, sname, spath = self.videoprovider.subtitles[asset_id]
             self.videoinfo.subtitle_name = sname
             self.videoinfo.subtitle_path = spath
         else:
@@ -91,6 +112,10 @@ class VLCWrapper:
     def _wake(self, data: dict) -> None:
         print("Wake called with data: ", data)
         wake_screen()
+
+    def _refresh(self, data: dict) -> None:
+        print("Refresh called with data: ", data)
+        self.videoprovider.refresh_series_data()
 
     def _step_time(self):
         timestamp = time.time()

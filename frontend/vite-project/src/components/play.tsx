@@ -75,6 +75,9 @@ const Control: React.FC<{ info: utils.VideoInfo }> = ({ info }) => {
     utils.playVideo(elapsed);
     setSliding(false);
   };
+  const inputUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setElapsed(parseInt(e.target.value));
+  };
 
   const styles = "play-button upper-bold col-a";
   return (
@@ -84,11 +87,9 @@ const Control: React.FC<{ info: utils.VideoInfo }> = ({ info }) => {
           type="range"
           value={elapsed}
           max={info.duration}
-          onChange={(e) => {
-            setElapsed(parseInt(e.target.value));
-          }}
-          onMouseDown={inputStart}
-          onMouseUp={inputStop}
+          onPointerDown={inputStart}
+          onPointerUp={inputStop}
+          onChange={inputUpdate}
         />
         <p className="upper-bold">{durationString(elapsed)}</p>
       </div>
